@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Home } from '../Home/Home'
+
 
 export const Navbar = () => {
     return (
@@ -12,7 +12,7 @@ export const Navbar = () => {
             <Link to='/articles'>
                 <button>Articles</button>
             </Link>
-            <Link to='/articles'>
+            <Link to='/users'>
                 <button>Users</button>
             </Link>
 
