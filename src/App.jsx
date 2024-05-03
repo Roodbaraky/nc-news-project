@@ -5,6 +5,7 @@ import { Header } from './components/Header/Header'
 import { Home } from './components/Home/Home';
 import { Articles } from './components/Articles/Articles';
 import { Article } from './components/Article/Article';
+import { Footer } from './components/Footer/Footer';
 
 function App() {
   const [articles, setArticles] = useState([])
@@ -44,6 +45,7 @@ function App() {
         </Route>
 
       </Routes>
+      <Footer />
 
 
     </>
