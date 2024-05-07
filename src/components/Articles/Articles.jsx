@@ -17,15 +17,16 @@ export const Articles = ({ articles, setArticles, setArticle }) => {
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
     const [searchTopic, setSearchTopic] = useState('')
+
     const topic = searchParams.get('topic')
 
-
-
+    if (topic && (searchTopic !== topic)) {
+        setSearchTopic(topic)
+    }
 
     useEffect(() => {
-        if (topic && searchTopic !== topic) {
-            setSearchTopic(topic)
-        }
+        
+
         if (!topic) {
             setSearchTopic('')
         }
