@@ -30,15 +30,28 @@ export const getCommentsById = (article_id) => {
         .then(({ data: { comments } }) => {
             return comments
         })
-} 
+}
 
-export const patchArticleVotes = (article_id, reqBody) =>{
+export const patchArticleVotes = (article_id, reqBody) => {
     return axios
-    .patch(`https://nc-news-solo-kr.onrender.com/api/articles/${article_id}`, reqBody)
-    .then(({data:{article}})=>{
-       
+        .patch(`https://nc-news-solo-kr.onrender.com/api/articles/${article_id}`, reqBody)
+        .then(({ data: { article } }) => {
+
+        })
+        .catch((err) => {
+            return Promise.reject({ status: err.status, msg: err.msg })
+        })
+}
+
+export const postArticleComment = (article_id, reqBody) => { 
+    
+    return axios
+    .post(`https://nc-news-solo-kr.onrender.com/api/articles/${article_id}/comments`, reqBody)
+    .then(({data})=>{
+    
     })
-    .catch((err)=>{
-        return Promise.reject({status:err.status, msg:err.msg})
+    .catch((err) => {
+        return Promise.reject({ status: err.status, msg: err.msg })
     })
+
 }
