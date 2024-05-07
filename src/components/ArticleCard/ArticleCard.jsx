@@ -13,6 +13,7 @@ export const ArticleCard = ({ article, setArticle }) => {
                 <img src={article.article_img_url} alt="" />
                 <p>{article.votes} votes</p>
                 <p>{article.comment_count} comments</p>
+                <p>{article.created_at}</p>
             </div>
         </Link>
     )

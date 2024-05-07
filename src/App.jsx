@@ -14,7 +14,10 @@ function App() {
 
   return (
     <>
-      <Header user={user}/>
+      <Header
+      user={user}
+      setUser={setUser}
+      />
       <Routes>
         <Route
           path="/"
@@ -39,6 +42,7 @@ function App() {
             <Article
               article={article}
               setArticle={setArticle}
+              user={user}
             />
           }
         >
