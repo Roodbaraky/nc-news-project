@@ -17,23 +17,27 @@ export const Articles = ({ articles, setArticles, setArticle }) => {
     const navigate = useNavigate()
     const [searchParams, setSearchParams] = useSearchParams()
     const [searchTopic, setSearchTopic] = useState('')
+    const [sortBy, setSortBy] = useState('created_at')
+    const [order, setOrder] = useState('DESC')
+
     const topic = searchParams.get('topic')
 
-
-
+    if (topic && (searchTopic !== topic)) {
+        setSearchTopic(topic, sortBy, order)
+    }
 
     useEffect(() => {
-        if (topic && searchTopic !== topic) {
-            setSearchTopic(topic)
-        }
         if (!topic) {
             setSearchTopic('')
         }
-        getArticles(searchTopic)
+        getArticles(searchTopic, sortBy, order)
             .then((articles) => {
                 setArticles(articles)
                 setIsLoading(false)
 
+            })
+            .catch((err)=>{
+                console.log(err)
             })
         getTopics()
             .then((topics) => {
@@ -41,14 +45,14 @@ export const Articles = ({ articles, setArticles, setArticle }) => {
             })
 
 
-    }, [searchTopic])
+    }, [searchTopic, sortBy, order])
 
     return (
 
         <>
             <div className='sort-filter-bar'>
-                <label htmlFor="">
-                    <select name="" id="" value={searchTopic || ''} onChange={(e) => {
+                <label htmlFor="">Topic:
+                    <select name="" id="" defaultValue={searchTopic||''} onChange={(e) => {
                         setSearchTopic(e.target.value)
                         if (e.target.value.length) {
                             setIsLoading(true)
@@ -60,10 +64,30 @@ export const Articles = ({ articles, setArticles, setArticle }) => {
                     }}>
                         <option value="">All</option>
                         {topics.map((topic) => {
-                            return <option key={topic.slug} value={topic.slug}>{topic.slug}</option>
+                            return <option key={topic.slug} value={topic.slug}>
+                                {topic.slug}
+                            </option>
                         })}
 
-                    </select></label>
+                    </select>
+                    </label>
+                <label htmlFor="">Sort by:
+                    <select name="" defaultValue={sortBy} onChange={(e)=>{
+                        setSortBy(e.target.value)
+                    }}>
+                        <option value="created_at">date</option>
+                        <option value="comment_count">comments</option>
+                        <option value="votes">votes</option>
+                    </select>
+                </label>
+                <label htmlFor="">Sort:
+                    <select name="" defaultValue={order} onChange={(e) => {
+                        setOrder(e.target.value)
+                    }}>
+                        <option value="DESC">DESC</option>
+                        <option value="ASC">ASC</option>
+                    </select>
+                    </label>
             </div>
             <div className='articles-container'>
                 {isLoading
