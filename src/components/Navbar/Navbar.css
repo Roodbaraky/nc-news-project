@@ -10,6 +10,8 @@ nav {
     z-index: 1;
     background-color: #242424;
     box-shadow: 0 0 2rem 1.5rem #242424;
+    margin-top: 20px;
+    border: none;
 }
 
 nav a>button {
@@ -43,6 +45,8 @@ nav a {
     margin: 0.5rem;
    
 }
+
+
 
 @media (prefers-color-scheme: light) {
     nav {
