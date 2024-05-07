@@ -39,6 +39,6 @@ export const patchArticleVotes = (article_id, reqBody) =>{
        
     })
     .catch((err)=>{
-        return err
+        return Promise.reject({status:err.status, msg:err.msg})
     })
 }
