@@ -10,7 +10,7 @@ export const getUser = (username) => {
 
 export const getArticles = (arg) => {
     return axios
-        .get(`https://nc-news-solo-kr.onrender.com/api/articles`, arg)
+        .get(`https://nc-news-solo-kr.onrender.com/api/articles`)
         .then(({ data: { articles } }) => {
             return articles;
         });
@@ -30,5 +30,15 @@ export const getCommentsById = (article_id) => {
         .then(({ data: { comments } }) => {
             return comments
         })
-
 } 
+
+export const patchArticleVotes = (article_id, reqBody) =>{
+    return axios
+    .patch(`https://nc-news-solo-kr.onrender.com/api/articles/${article_id}`, reqBody)
+    .then(({data:{article}})=>{
+       
+    })
+    .catch((err)=>{
+        return err
+    })
+}
