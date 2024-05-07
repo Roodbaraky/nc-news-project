@@ -1,14 +1,10 @@
 import React from 'react'
-import { Navbar } from '../Navbar/Navbar'
 import './Header.css'
 
-export const Header = ({ user, setUser }) => {
+export const Header = ({Navbar}) => {
   return (
 
-    <Navbar
-      user={user}
-      setUser={setUser}
-    />
+    <>{Navbar}</>
 
   )
 }
