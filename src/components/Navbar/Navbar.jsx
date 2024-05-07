@@ -2,12 +2,18 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './Navbar.css'
 import { getImageUrl } from '../../../utils'
+import { Login } from '../Login/Login'
 
-export const Navbar = () => {
+export const Navbar = ({ user }) => {
     const [menuOpen, setMenuOpen] = useState(false)
+    const [userOpen, setUserOpen] = useState(false)
+
 
     const handleBurger = () => {
         setMenuOpen(!menuOpen)
+    }
+    const handleUser = () => {
+        setUserOpen(!userOpen)
     }
 
     return (
@@ -18,7 +24,7 @@ export const Navbar = () => {
                 : getImageUrl('menuIcon.png')} />
 
 
-            <div className={`navBtns  ${menuOpen===true}`}>
+            <div className={`navBtns  ${menuOpen === true}`}>
                 <Link to='/' className='navBtn'>
                     <button >Home</button>
                 </Link>
@@ -30,7 +36,11 @@ export const Navbar = () => {
                 </Link>
             </div>
 
-            <Link><button>Login</button></Link>
+            <img className='userBtn' onClick={handleUser} src={user.hasOwnProperty('avatar_url')
+                ? user.avatar_url
+                : getImageUrl('userIcon.png')
+            } alt="" />
+            {userOpen && <Login/>}
 
 
         </nav>

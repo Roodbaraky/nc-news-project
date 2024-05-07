@@ -10,10 +10,11 @@ import { Footer } from './components/Footer/Footer';
 function App() {
   const [articles, setArticles] = useState([])
   const [article, setArticle] = useState({})
+  const [user, setUser] = useState({})
 
   return (
     <>
-      <Header />
+      <Header user={user}/>
       <Routes>
         <Route
           path="/"

@@ -33,6 +33,16 @@ nav a {
 .burgerBtn{
     display: none;
 }
+.userBtn{
+    display: flex;
+    position: fixed;
+    right:0;
+    top: 0;
+    width: 55px;
+   padding: 0.2rem;
+    margin: 0.5rem;
+   
+}
 
 @media (prefers-color-scheme: light) {
     nav {
@@ -64,11 +74,16 @@ nav a {
     .burgerBtn{
         display: flex;
         position: fixed;
-        left:0;
-        top: 0;
         width: 55px;
        padding: 0.2rem;
         margin: 0.5rem;
        
+    }
+    .userBtn{
+        top:auto;
+        left: auto;
+    }
+    nav{
+        justify-content: space-between;
     }
 }
