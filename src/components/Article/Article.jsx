@@ -14,6 +14,10 @@ export const Article = ({ article, setArticle, user }) => {
     let [postIndicator, setPostIndicator] = useState(0)
     let [votes, setVotes] = useState(0)
     const [comments, setComments] = useState([])
+    let [upVoted, setUpVoted] = useState(false)
+    let [downVoted, setDownVoted] = useState(false)
+
+
 
     useEffect(() => {
         getArticleById(article_id)
@@ -27,20 +31,27 @@ export const Article = ({ article, setArticle, user }) => {
 
 
     const vote = (e) => {
+
         let voteBody
-        if (e.target.innerText === 'UP') {
+        if (e.target.innerText === 'UP' && !upVoted) {
             voteBody = { inc_votes: 1 }
+            setUpVoted(true)
+            setDownVoted(false)
             setVotes(++votes)
         }
-        if (e.target.innerText === 'DOWN') {
+        if (e.target.innerText === 'DOWN' && !downVoted) {
             voteBody = { inc_votes: -1 }
+            setDownVoted(true)
+            setUpVoted(false)
             setVotes(--votes)
         }
-        patchArticleVotes(article_id, voteBody)
-            .then(() => { })
-            .catch(() => {
-                alert('Error contacting the server')
-            })
+        if (voteBody) {
+            patchArticleVotes(article_id, voteBody)
+                .then(() => { })
+                .catch(() => {
+                    alert('Error contacting the server')
+                })
+        }
     }
 
     const comment = (e) => {
