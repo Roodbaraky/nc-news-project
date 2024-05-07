@@ -15,6 +15,11 @@ export const Navbar = ({ user, setUser }) => {
     const handleUser = () => {
         setUserOpen(!userOpen)
     }
+    const clickHandler = () =>{
+        if (menuOpen){
+            setMenuOpen(false)
+        }
+    }
 
     return (
         <nav>
@@ -24,9 +29,9 @@ export const Navbar = ({ user, setUser }) => {
                 : getImageUrl('menuIcon.png')} />
 
 
-            <div className={`navBtns  ${menuOpen === true}`}>
+            <div onClick={clickHandler} className={`navBtns  ${menuOpen === true}`}>
                 <Link to='/' className='navBtn'>
-                    <button >Home</button>
+                    <button  >Home</button>
                 </Link>
                 <Link to='/articles' className='navBtn'>
                     <button >Articles</button>
