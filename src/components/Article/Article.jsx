@@ -4,7 +4,6 @@ import { getArticleById, patchArticleVotes, postArticleComment } from '../../../
 import './Article.css'
 import '../../../src/spinkit.min.css'
 import { Comments } from '../Comments/Comments'
-import { CommentCard } from '../CommentCard/CommentCard'
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
 import moment from 'moment'
 export const Article = ({ article, setArticle, user }) => {
@@ -28,7 +27,7 @@ export const Article = ({ article, setArticle, user }) => {
                 setVotes(article.votes)
 
             })
-    }, [postIndicator, <Comments/> ])
+    }, [postIndicator ])
 
 
     const vote = (e) => {
