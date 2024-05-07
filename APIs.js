@@ -35,7 +35,7 @@ export const getCommentsById = (article_id) => {
 export const patchArticleVotes = (article_id, reqBody) => {
     return axios
         .patch(`https://nc-news-solo-kr.onrender.com/api/articles/${article_id}`, reqBody)
-        .then(({ data: { article } }) => {
+        .then(() => {
 
         })
         .catch((err) => {
@@ -43,15 +43,25 @@ export const patchArticleVotes = (article_id, reqBody) => {
         })
 }
 
-export const postArticleComment = (article_id, reqBody) => { 
-    
+export const postArticleComment = (article_id, reqBody) => {
+
     return axios
-    .post(`https://nc-news-solo-kr.onrender.com/api/articles/${article_id}/comments`, reqBody)
-    .then(({data})=>{
-    
-    })
-    .catch((err) => {
-        return Promise.reject({ status: err.status, msg: err.msg })
-    })
+        .post(`https://nc-news-solo-kr.onrender.com/api/articles/${article_id}/comments`, reqBody)
+        .then(({ data }) => {
+
+        })
+        .catch((err) => {
+            return Promise.reject({ status: err.status, msg: err.msg })
+        })
 
 }
+
+export const deleteArticleComment = (comment_id) => {
+    return axios
+        .delete(`https://nc-news-solo-kr.onrender.com/api/comments/${comment_id}`)
+        .then(() => { })
+        .catch((err) => {
+            return Promise.reject({ status: err.status, msg: err.msg })
+        })
+}
+

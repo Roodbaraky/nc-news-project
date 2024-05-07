@@ -21,10 +21,10 @@ export const Login = ({ setUser, setUserOpen }) => {
 
   }
   return (
-    <section className='login-section' action="">
+    <form className='login-form' action="">
       <label>Username: <input type="text" /></label>
       <label>Password: <input type="password" /></label>
       <button onClick={handleClick}>Log in</button>
-    </section>
+    </form>
   )
 }

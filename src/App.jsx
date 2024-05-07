@@ -6,6 +6,7 @@ import { Home } from './components/Home/Home';
 import { Articles } from './components/Articles/Articles';
 import { Article } from './components/Article/Article';
 import { Footer } from './components/Footer/Footer';
+import { Navbar } from './components/Navbar/Navbar';
 
 function App() {
   const [articles, setArticles] = useState([])
@@ -15,9 +16,10 @@ function App() {
   return (
     <>
       <Header
-      user={user}
-      setUser={setUser}
-      />
+        Navbar={<Navbar
+          user={user}
+          setUser={setUser}
+        />} />
       <Routes>
         <Route
           path="/"
