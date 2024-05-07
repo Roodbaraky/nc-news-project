@@ -4,7 +4,7 @@ import './Navbar.css'
 import { getImageUrl } from '../../../utils'
 import { Login } from '../Login/Login'
 
-export const Navbar = ({ user }) => {
+export const Navbar = ({ user, setUser }) => {
     const [menuOpen, setMenuOpen] = useState(false)
     const [userOpen, setUserOpen] = useState(false)
 
@@ -40,7 +40,10 @@ export const Navbar = ({ user }) => {
                 ? user.avatar_url
                 : getImageUrl('userIcon.png')
             } alt="" />
-            {userOpen && <Login/>}
+            {userOpen && <Login 
+            setUser={setUser}
+            setUserOpen={setUserOpen}
+            />}
 
 
         </nav>

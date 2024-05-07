@@ -19,8 +19,16 @@ export const getArticles = (arg) => {
 export const getArticleById = (article_id) => {
     return axios
         .get(`https://nc-news-solo-kr.onrender.com/api/articles/${article_id}`)
-        .then(({data}) => {
+        .then(({ data }) => {
             return data;
         });
 };
 
+export const getCommentsById = (article_id) => {
+    return axios
+        .get(`https://nc-news-solo-kr.onrender.com/api/articles/${article_id}/comments`)
+        .then(({ data: { comments } }) => {
+            return comments
+        })
+
+} 
