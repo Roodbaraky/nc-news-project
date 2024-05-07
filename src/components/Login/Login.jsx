@@ -1,5 +1,6 @@
 import React from 'react'
 import { getUser } from '../../../APIs'
+import './Login.css'
 
 export const Login = ({ setUser, setUserOpen }) => {
 
@@ -20,10 +21,10 @@ export const Login = ({ setUser, setUserOpen }) => {
 
   }
   return (
-    <form action="">
+    <section className='login-section' action="">
       <label>Username: <input type="text" /></label>
       <label>Password: <input type="password" /></label>
       <button onClick={handleClick}>Log in</button>
-    </form>
+    </section>
   )
 }
