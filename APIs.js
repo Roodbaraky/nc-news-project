@@ -15,3 +15,12 @@ export const getArticles = (arg) => {
             return articles;
         });
 };
+
+export const getArticleById = (article_id) => {
+    return axios
+        .get(`https://nc-news-solo-kr.onrender.com/api/articles/${article_id}`)
+        .then(({data}) => {
+            return data;
+        });
+};
+

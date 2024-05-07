@@ -4,13 +4,17 @@ import './App.css'
 import { Header } from './components/Header/Header'
 import { Home } from './components/Home/Home';
 import { Articles } from './components/Articles/Articles';
+import { Article } from './components/Article/Article';
+import { Footer } from './components/Footer/Footer';
 
 function App() {
   const [articles, setArticles] = useState([])
+  const [article, setArticle] = useState({})
+  const [user, setUser] = useState({})
 
   return (
     <>
-      <Header />
+      <Header user={user}/>
       <Routes>
         <Route
           path="/"
@@ -24,11 +28,25 @@ function App() {
             <Articles
               articles={articles}
               setArticles={setArticles}
+              setArticle={setArticle}
             />
           }
+
         />
+        <Route
+          path='/articles/:article_id'
+          element={
+            <Article
+              article={article}
+              setArticle={setArticle}
+            />
+          }
+        >
+
+        </Route>
 
       </Routes>
+      <Footer />
 
 
     </>
