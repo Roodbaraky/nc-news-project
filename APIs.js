@@ -8,9 +8,14 @@ export const getUser = (username) => {
         });
 };
 
-export const getArticles = (arg) => {
+export const getArticles = (searchTerm) => {
     return axios
-        .get(`https://nc-news-solo-kr.onrender.com/api/articles`)
+        .get(`https://nc-news-solo-kr.onrender.com/api/articles`, {
+            params: {
+                topic: searchTerm,
+                
+            }
+        })
         .then(({ data: { articles } }) => {
             return articles;
         });
@@ -65,3 +70,10 @@ export const deleteArticleComment = (comment_id) => {
         })
 }
 
+export const getTopics = () => {
+    return axios
+        .get(`https://nc-news-solo-kr.onrender.com/api/topics`)
+        .then(({ data: { topics } }) => {
+            return topics;
+        });
+}

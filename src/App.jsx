@@ -8,10 +8,12 @@ import { Article } from './components/Article/Article';
 import { Footer } from './components/Footer/Footer';
 import { Navbar } from './components/Navbar/Navbar';
 
+
 function App() {
   const [articles, setArticles] = useState([])
   const [article, setArticle] = useState({})
   const [user, setUser] = useState({})
+
 
   return (
     <>
@@ -47,9 +49,9 @@ function App() {
               user={user}
             />
           }
-        >
+        />
 
-        </Route>
+      
 
       </Routes>
       <Footer />
