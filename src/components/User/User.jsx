@@ -5,6 +5,7 @@ import './User.css'
 import { ArticleCard } from '../ArticleCard/ArticleCard'
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
 import { CommentCard } from '../CommentCard/CommentCard'
+import { ProfileCommentCard } from '../ProfileCommentCard/ProfileCommentCard'
 export const User = ({ setError }) => {
     const [profileIsLoading, setProfileIsLoading] = useState(true)
     const [articlesAreLoading, setArticlesAreLoading] = useState(true)
@@ -64,7 +65,7 @@ export const User = ({ setError }) => {
             {commentsAreLoading
                     ? <LoadingSpinner />
                     : userComments.map((comment) => {
-                        return <CommentCard
+                        return <ProfileCommentCard
                             key={comment.comment_id} comment={comment} user={userProfile}/>
                     })}
             </section>
