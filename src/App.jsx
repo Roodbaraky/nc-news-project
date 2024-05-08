@@ -26,6 +26,9 @@ function App() {
       .then((users) => {
         setUsers(users)
       })
+      .catch((err)=>{
+        
+      })
   }, [])
 
 
