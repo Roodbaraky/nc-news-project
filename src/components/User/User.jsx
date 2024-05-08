@@ -4,7 +4,7 @@ import { getArticles, getUser } from '../../../APIs'
 import './User.css'
 import { ArticleCard } from '../ArticleCard/ArticleCard'
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
-export const User = () => {
+export const User = ({setError}) => {
     const [profileIsLoading, setProfileIsLoading] = useState(true)
     const [articlesAreLoading, setArticlesAreLoading] = useState(true)
 
@@ -17,7 +17,7 @@ export const User = () => {
             .then((user) => {
                 setUserProfile(user)
                 setProfileIsLoading(false)
-                getArticles(null, null, null, user.username)
+                getArticles(null, null, null, null, null, user.username)
                     .then((articles) => {
                         setUserArticles(articles)
                         setArticlesAreLoading(false)

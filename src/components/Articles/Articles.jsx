@@ -4,6 +4,7 @@ import { ArticleCard } from '../ArticleCard/ArticleCard'
 import './Articles.css'
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { pageCalculator } from '../../../utils'
 
 
 
@@ -19,21 +20,37 @@ export const Articles = ({ articles, setArticles, setError }) => {
     const [searchTopic, setSearchTopic] = useState('')
     const [sortBy, setSortBy] = useState('created_at')
     const [order, setOrder] = useState('DESC')
+    const [limit, setLimit] = useState('10')
+    const [p, setP] = useState('1')
+    const [pArr, setPArr] = useState([])
+    const [totalCount, setTotalCount] = useState(0)
 
     const topic = searchParams.get('topic')
 
     if (topic && (searchTopic !== topic)) {
-        setSearchTopic(topic, sortBy, order)
+        setSearchTopic(topic)
     }
 
     useEffect(() => {
         if (!topic) {
             setSearchTopic('')
         }
-        getArticles(searchTopic, sortBy, order)
+        getArticles(searchTopic, sortBy, order, limit, p)
             .then((articles) => {
-                setArticles(articles)
-                setIsLoading(false)
+                if (articles.hasOwnProperty('totalCount')) {
+
+                    setTotalCount(articles.totalCount)
+
+                    setArticles(articles.rows)
+                    setIsLoading(false)
+                } else {
+                    setArticles(articles)
+                    setIsLoading(false)
+                }
+
+            })
+            .then(() => {
+                setPArr(pageCalculator(totalCount, +limit))
 
             })
             .catch((err) => {
@@ -50,7 +67,7 @@ export const Articles = ({ articles, setArticles, setError }) => {
             })
 
 
-    }, [searchTopic, sortBy, order])
+    }, [searchTopic, sortBy, order, limit, p])
 
     return (
 
@@ -91,6 +108,25 @@ export const Articles = ({ articles, setArticles, setError }) => {
                     }}>
                         <option value="DESC">DESC</option>
                         <option value="ASC">ASC</option>
+                    </select>
+                </label>
+                <label htmlFor="">Limit:
+                    <select defaultValue={limit} name="" id="" onChange={(e) => {
+                        setLimit(e.target.value)
+                    }}>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value={totalCount || '100'}>ALL</option>
+
+                    </select>
+                </label>
+                <label htmlFor="">Page:
+                    <select name="" id="" onChange={(e) => {
+                        setP(e.target.value)
+                    }}>
+                        <option value="1">1</option>
+                        {pArr.map((x) => { return <option key={x}>{x}</option> })}
                     </select>
                 </label>
             </div>

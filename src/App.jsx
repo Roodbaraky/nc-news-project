@@ -75,13 +75,15 @@ function App() {
           element={
             <Users
               users={users}
+              
             />}
         />
 
         <Route
           path='/users/:username'
           element={
-            <User />
+            <User 
+            setError={setError}/>
           }
         />
 
