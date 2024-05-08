@@ -8,6 +8,14 @@ export const getUser = (username) => {
         });
 };
 
+export const getUsers = () => { 
+    return axios
+    .get(`https://nc-news-solo-kr.onrender.com/api/users`)
+    .then(({data:{users}})=>{
+        return users
+    })
+}
+
 export const getArticles = (searchTerm, sort_by, order) => {
     return axios
         .get(`https://nc-news-solo-kr.onrender.com/api/articles`, {
@@ -20,7 +28,7 @@ export const getArticles = (searchTerm, sort_by, order) => {
         .then(({ data: { articles } }) => {
             return articles;
         })
-        .catch((err)=>{
+        .catch((err) => {
             return Promise.reject({ status: err.response.status, msg: err.message })
         })
 }
@@ -31,7 +39,7 @@ export const getArticleById = (article_id) => {
         .then(({ data }) => {
             return data;
         })
-        .catch((err)=>{
+        .catch((err) => {
             return Promise.reject({ status: err.response.status, msg: err.message })
         })
 
@@ -43,7 +51,7 @@ export const getCommentsById = (article_id) => {
         .then(({ data: { comments } }) => {
             return comments
         })
-        .catch((err)=>{
+        .catch((err) => {
             return Promise.reject({ status: err.response.status, msg: err.message })
         })
 }

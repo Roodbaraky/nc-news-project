@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Route, Routes } from "react-router-dom";
 import './App.css'
 import { Header } from './components/Header/Header'
@@ -8,6 +8,7 @@ import { Article } from './components/Article/Article';
 import { Footer } from './components/Footer/Footer';
 import { Navbar } from './components/Navbar/Navbar';
 import { Error } from './components/Error/Error';
+import { getUsers } from '../APIs';
 
 
 function App() {
@@ -15,7 +16,15 @@ function App() {
   const [article, setArticle] = useState({})
   const [user, setUser] = useState({})
   const [error, setError] = useState({})
+  const [users, setUsers] = useState([])
 
+
+  useEffect(() => {
+    getUsers()
+      .then((users) => {
+        setUsers(users.map((user)=>user.username))
+      })
+  }, [])
 
 
   return (
@@ -24,6 +33,10 @@ function App() {
         Navbar={<Navbar
           user={user}
           setUser={setUser}
+          users={users}
+          setError={setError}
+
+
         />} />
       <Routes>
         <Route
