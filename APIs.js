@@ -16,13 +16,15 @@ export const getUsers = () => {
         })
 }
 
-export const getArticles = (searchTerm, sort_by, order, author) => {
+export const getArticles = (searchTerm, sort_by, order, limit, p, author) => {
     return axios
         .get(`https://nc-news-solo-kr.onrender.com/api/articles`, {
             params: {
                 topic: searchTerm,
                 sort_by: sort_by,
                 order: order,
+                limit: limit,
+                p: p,
                 author: author
             }
         })
@@ -30,6 +32,7 @@ export const getArticles = (searchTerm, sort_by, order, author) => {
             return articles;
         })
         .catch((err) => {
+            console.log(err)
             return Promise.reject({ status: err.response.status, msg: err.message })
         })
 }
