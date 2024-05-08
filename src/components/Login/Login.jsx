@@ -10,7 +10,7 @@ export const Login = ({ setUser, setUserOpen, users, setError }) => {
   const handleClick = (e) => {
     e.preventDefault()
     const enteredUser = e.target.parentElement[0].value
-    if (users.includes(enteredUser)) {
+    if (users.map((user) => user.username).includes(enteredUser)) {
       getUser(enteredUser)
       .then((user) => {
         if (user) {

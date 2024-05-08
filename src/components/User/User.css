@@ -1,0 +1,25 @@
+.user-profile-container{
+    display: flex;
+    flex-direction: column;
+    place-content: center;
+    place-items: center;
+}
+.user-username{
+    font-size: 3.6rem;
+    font-weight: 600;
+    margin:1rem;
+}
+.user-name{
+    font-size: 2rem;
+    margin:1rem;
+}
+.user-articles{
+    width: 90%;
+    margin-top: 3rem;
+    margin-bottom: 5rem;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
