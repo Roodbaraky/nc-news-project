@@ -35,14 +35,12 @@ export const Articles = ({ articles, setArticles, setError }) => {
         if (!topic) {
             setSearchTopic('')
         }
-        getArticles(searchTopic, sortBy, order, limit, p)
+        getArticles(searchTopic, sortBy, order, limit, +p||'1')
             .then((articles) => {
                 if (articles.hasOwnProperty('totalCount')) {
-
                     setTotalCount(articles.totalCount)
-
                     setArticles(articles.rows)
-                    setIsLoading(false)
+                    
                 } else {
                     setArticles(articles)
                     setIsLoading(false)
@@ -51,6 +49,7 @@ export const Articles = ({ articles, setArticles, setError }) => {
             })
             .then(() => {
                 setPArr(pageCalculator(totalCount, +limit))
+                setIsLoading(false)
 
             })
             .catch((err) => {
@@ -122,11 +121,14 @@ export const Articles = ({ articles, setArticles, setError }) => {
                     </select>
                 </label>
                 <label htmlFor="">Page:
-                    <select name="" id="" onChange={(e) => {
+                    <select name="" id=""  defaultValue='1' onChange={(e) => {
                         setP(e.target.value)
                     }}>
                         <option value="1">1</option>
-                        {pArr.map((x) => { return <option key={x}>{x}</option> })}
+                        {/* {console.log('length:',pArr.length)}  */}
+                        {pArr.length>1
+                        ?pArr.map((x) => { return <option key={x}>{x}</option> })
+                        :''}
                     </select>
                 </label>
             </div>
