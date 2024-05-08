@@ -55,7 +55,7 @@ export const User = ({ setError }) => {
             <section className='user-articles'>
                 {articlesAreLoading
                     ? <LoadingSpinner />
-                    : userArticles.map((article) => {
+                    : userArticles.toSorted((a,b)=> b.votes - a.votes).slice(0,4).map((article) => {
                         return <ArticleCard
                             key={article.article_id} article={article} />
                     })}
@@ -64,7 +64,7 @@ export const User = ({ setError }) => {
             <section className='user-comments'>
             {commentsAreLoading
                     ? <LoadingSpinner />
-                    : userComments.map((comment) => {
+                    : userComments.toSorted((a,b)=> b.votes - a.votes).slice(0,4).map((comment) => {
                         return <ProfileCommentCard
                             key={comment.comment_id} comment={comment} user={userProfile}/>
                     })}
