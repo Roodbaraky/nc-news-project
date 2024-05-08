@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate, Navigate } from 'react-router-dom'
 import { getArticleById, patchArticleVotes, postArticleComment } from '../../../APIs'
 import './Article.css'
 import '../../../src/spinkit.min.css'
 import { Comments } from '../Comments/Comments'
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
+
 import moment from 'moment'
-export const Article = ({ article, setArticle, user }) => {
+export const Article = ({ article, setArticle, user, setError }) => {
     let { article_id } = useParams()
     const [isLoading, setIsLoading] = useState(true)
     const [leaveComment, setLeaveComment] = useState(false)
@@ -16,6 +17,7 @@ export const Article = ({ article, setArticle, user }) => {
     const [comments, setComments] = useState([])
     let [upVoted, setUpVoted] = useState(false)
     let [downVoted, setDownVoted] = useState(false)
+    const navigate = useNavigate()
 
 
 
@@ -26,6 +28,10 @@ export const Article = ({ article, setArticle, user }) => {
                 setArticle(article)
                 setVotes(article.votes)
 
+            })
+            .catch((err) => {
+                setError(err)
+                navigate(`/error`)
             })
     }, [postIndicator ])
 
@@ -61,7 +67,7 @@ export const Article = ({ article, setArticle, user }) => {
     const postComment = (e) => {
         if (!posting) {
             const commentBody = {
-                username: user.username || 'jessjelly',
+                username: user.username ||'jessjelly' ,
                 body: e.target.parentElement.children[0].value
             }
             if (commentBody.body.length) {
@@ -74,6 +80,14 @@ export const Article = ({ article, setArticle, user }) => {
                 setLeaveComment(!leaveComment)
                 setPosting(true)
 
+            }
+            else{
+                if (commentBody.username){
+                    alert('You can\'t post an empty comment')
+                }else{
+                    alert('You must be signed in to post a comment')
+                }
+                
             }
         }
     }

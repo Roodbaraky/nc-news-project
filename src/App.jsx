@@ -7,12 +7,15 @@ import { Articles } from './components/Articles/Articles';
 import { Article } from './components/Article/Article';
 import { Footer } from './components/Footer/Footer';
 import { Navbar } from './components/Navbar/Navbar';
+import { Error } from './components/Error/Error';
 
 
 function App() {
   const [articles, setArticles] = useState([])
   const [article, setArticle] = useState({})
   const [user, setUser] = useState({})
+  const [error, setError] = useState({})
+
 
 
   return (
@@ -36,6 +39,7 @@ function App() {
               articles={articles}
               setArticles={setArticles}
               setArticle={setArticle}
+              setError={setError}
             />
           }
 
@@ -47,11 +51,17 @@ function App() {
               article={article}
               setArticle={setArticle}
               user={user}
+              setError={setError}
             />
           }
         />
 
-      
+
+        <Route
+          path='*'
+          element={<Error
+            error={error} />} />
+
 
       </Routes>
       <Footer />
