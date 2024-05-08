@@ -11,7 +11,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 
 
 
-export const Articles = ({ articles, setArticles, setArticle }) => {
+export const Articles = ({ articles, setArticles, setError }) => {
     const [isLoading, setIsLoading] = useState(true)
     const [topics, setTopics] = useState([])
     const navigate = useNavigate()
@@ -36,12 +36,17 @@ export const Articles = ({ articles, setArticles, setArticle }) => {
                 setIsLoading(false)
 
             })
-            .catch((err)=>{
-                console.log(err)
+            .catch((err) => {
+                setError(err)
+                navigate(`/error`)
             })
         getTopics()
             .then((topics) => {
                 setTopics(topics)
+            })
+            .catch((err) => {
+                setError(err)
+                navigate(`/error`)
             })
 
 
@@ -52,7 +57,7 @@ export const Articles = ({ articles, setArticles, setArticle }) => {
         <>
             <div className='sort-filter-bar'>
                 <label htmlFor="">Topic:
-                    <select name="" id="" defaultValue={searchTopic||''} onChange={(e) => {
+                    <select name="" id="" defaultValue={searchTopic || ''} onChange={(e) => {
                         setSearchTopic(e.target.value)
                         if (e.target.value.length) {
                             setIsLoading(true)
@@ -70,9 +75,9 @@ export const Articles = ({ articles, setArticles, setArticle }) => {
                         })}
 
                     </select>
-                    </label>
+                </label>
                 <label htmlFor="">Sort by:
-                    <select name="" defaultValue={sortBy} onChange={(e)=>{
+                    <select name="" defaultValue={sortBy} onChange={(e) => {
                         setSortBy(e.target.value)
                     }}>
                         <option value="created_at">date</option>
@@ -87,7 +92,7 @@ export const Articles = ({ articles, setArticles, setArticle }) => {
                         <option value="DESC">DESC</option>
                         <option value="ASC">ASC</option>
                     </select>
-                    </label>
+                </label>
             </div>
             <div className='articles-container'>
                 {isLoading

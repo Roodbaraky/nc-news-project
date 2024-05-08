@@ -8,6 +8,14 @@ export const getUser = (username) => {
         });
 };
 
+export const getUsers = () => { 
+    return axios
+    .get(`https://nc-news-solo-kr.onrender.com/api/users`)
+    .then(({data:{users}})=>{
+        return users
+    })
+}
+
 export const getArticles = (searchTerm, sort_by, order) => {
     return axios
         .get(`https://nc-news-solo-kr.onrender.com/api/articles`, {
@@ -20,18 +28,21 @@ export const getArticles = (searchTerm, sort_by, order) => {
         .then(({ data: { articles } }) => {
             return articles;
         })
-        .catch((err)=>{
-            console.log(err)
-            return Promise.reject({ status: err.code, msg: err.message })
+        .catch((err) => {
+            return Promise.reject({ status: err.response.status, msg: err.message })
         })
-};
+}
 
 export const getArticleById = (article_id) => {
     return axios
         .get(`https://nc-news-solo-kr.onrender.com/api/articles/${article_id}`)
         .then(({ data }) => {
             return data;
-        });
+        })
+        .catch((err) => {
+            return Promise.reject({ status: err.response.status, msg: err.message })
+        })
+
 };
 
 export const getCommentsById = (article_id) => {
@@ -39,6 +50,9 @@ export const getCommentsById = (article_id) => {
         .get(`https://nc-news-solo-kr.onrender.com/api/articles/${article_id}/comments`)
         .then(({ data: { comments } }) => {
             return comments
+        })
+        .catch((err) => {
+            return Promise.reject({ status: err.response.status, msg: err.message })
         })
 }
 
@@ -49,7 +63,7 @@ export const patchArticleVotes = (article_id, reqBody) => {
 
         })
         .catch((err) => {
-            return Promise.reject({ status: err.code, msg: err.message })
+            return Promise.reject({ status: err.response.status, msg: err.message })
         })
 }
 
@@ -61,7 +75,7 @@ export const postArticleComment = (article_id, reqBody) => {
 
         })
         .catch((err) => {
-            return Promise.reject({ status: err.code, msg: err.message })
+            return Promise.reject({ status: err.response.status, msg: err.message })
         })
 
 }
@@ -71,7 +85,7 @@ export const deleteArticleComment = (comment_id) => {
         .delete(`https://nc-news-solo-kr.onrender.com/api/comments/${comment_id}`)
         .then(() => { })
         .catch((err) => {
-            return Promise.reject({ status: err.code, msg: err.message })
+            return Promise.reject({ status: err.response.status, msg: err.message })
         })
 }
 

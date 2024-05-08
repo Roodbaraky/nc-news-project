@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Route, Routes } from "react-router-dom";
 import './App.css'
 import { Header } from './components/Header/Header'
@@ -7,12 +7,24 @@ import { Articles } from './components/Articles/Articles';
 import { Article } from './components/Article/Article';
 import { Footer } from './components/Footer/Footer';
 import { Navbar } from './components/Navbar/Navbar';
+import { Error } from './components/Error/Error';
+import { getUsers } from '../APIs';
 
 
 function App() {
   const [articles, setArticles] = useState([])
   const [article, setArticle] = useState({})
   const [user, setUser] = useState({})
+  const [error, setError] = useState({})
+  const [users, setUsers] = useState([])
+
+
+  useEffect(() => {
+    getUsers()
+      .then((users) => {
+        setUsers(users.map((user)=>user.username))
+      })
+  }, [])
 
 
   return (
@@ -21,6 +33,10 @@ function App() {
         Navbar={<Navbar
           user={user}
           setUser={setUser}
+          users={users}
+          setError={setError}
+
+
         />} />
       <Routes>
         <Route
@@ -36,6 +52,7 @@ function App() {
               articles={articles}
               setArticles={setArticles}
               setArticle={setArticle}
+              setError={setError}
             />
           }
 
@@ -47,11 +64,17 @@ function App() {
               article={article}
               setArticle={setArticle}
               user={user}
+              setError={setError}
             />
           }
         />
 
-      
+
+        <Route
+          path='*'
+          element={<Error
+            error={error} />} />
+
 
       </Routes>
       <Footer />

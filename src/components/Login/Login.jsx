@@ -1,12 +1,17 @@
-import React from 'react'
-import { getUser } from '../../../APIs'
+import React, { useEffect, useState } from 'react'
+import { getUser, getUsers } from '../../../APIs'
 import './Login.css'
+import { useNavigate } from 'react-router-dom'
 
-export const Login = ({ setUser, setUserOpen }) => {
+export const Login = ({ setUser, setUserOpen, users, setError }) => {
+  const navigate = useNavigate()
+
 
   const handleClick = (e) => {
     e.preventDefault()
-    getUser(e.target.parentElement[0].value)
+    const enteredUser = e.target.parentElement[0].value
+    if (users.includes(enteredUser)) {
+      getUser(enteredUser)
       .then((user) => {
         if (user) {
           setUser(user)
@@ -15,9 +20,13 @@ export const Login = ({ setUser, setUserOpen }) => {
           setUserOpen(false)
         }
       })
-      .catch(() => {
-        e.target.parentElement[0].value = 'user not found'
+      .catch((err) => {
+        setError(err)
+        navigate(`/error`)
       })
+    }else{
+      alert('Please enter a valid username (& password)')
+    }
 
   }
   return (
