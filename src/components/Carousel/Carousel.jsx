@@ -1,76 +1,43 @@
 import React, { useState } from 'react'
-import ReactSimplyCarousel from 'react-simply-carousel';
+import Slider from "react-slick"
+import "slick-carousel/slick/slick.css"
+import "slick-carousel/slick/slick-theme.css"
+import './Carousel.css'
+import { Link } from 'react-router-dom'
 
 
-export const Carousel = ({articles}) => {
-    const [activeSlideIndex, setActiveSlideIndex] = useState(0);
-    console.log(articles)
-  return (
-    <div>
-      <ReactSimplyCarousel
-        activeSlideIndex={activeSlideIndex}
-        onRequestChange={setActiveSlideIndex}
-        itemsToShow={1}
-        itemsToScroll={1}
-        forwardBtnProps={{
+export const Carousel = ({ articles }) => {
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 1500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        adaptiveHeight: true,
+        autoplay: true,
+        autoplaySpeed: 2700,
+    };
+    return (
 
-            style: {
-            alignSelf: 'center',
-            background: 'black',
-            border: 'none',
-            borderRadius: '50%',
-            color: 'white',
-            cursor: 'pointer',
-            fontSize: '20px',
-            height: 30,
-            lineHeight: 1,
-            textAlign: 'center',
-            width: 30,
-          },
-          children: <span>{`>`}</span>,
-        }}
-        backwardBtnProps={{
+        <div className='slider-container'>
+            <Slider {...settings}>
+                {articles.map((article) => {
+                    return (
 
-            style: {
-            alignSelf: 'center',
-            background: 'black',
-            border: 'none',
-            borderRadius: '50%',
-            color: 'white',
-            cursor: 'pointer',
-            fontSize: '20px',
-            height: 30,
-            lineHeight: 1,
-            textAlign: 'center',
-            width: 30,
-          },
-          children: <span>{`<`}</span>,
-        }}
-        responsiveProps={[
-          {
-            itemsToShow: 2,
-            itemsToScroll: 2,
-            minWidth: 768,
-          },
-        ]}
-        speed={400}
-        easing="linear"
-      >
+                        <Link to={`/articles/${article.article_id}`} key={article.article_id} >
+                            <div className='carousel-slide'>
+                                <p>{article.title}</p>
+                                <img src={article.article_img_url} alt="" />
+                                <p>{article.votes} votes</p>
+                            </div>
 
-        {articles.map((article)=>{
-            return(
-                
-                   <div>
-                    <p>{article.title}</p>
-                    <img src={article.article_img_url} alt="" />
-                    <p>{article.votes}</p>
-                    
-                    </div>
-                
-            )
-        })}
-      </ReactSimplyCarousel>
-    </div>
+                        </Link>
+                    )
+                })}
+            </Slider>
+        </div>
 
-  )
+
+
+    )
 }
