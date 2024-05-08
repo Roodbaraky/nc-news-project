@@ -32,7 +32,7 @@ export const getArticles = (searchTerm, sort_by, order, limit, p, author) => {
             return articles;
         })
         .catch((err) => {
-            console.log(err)
+            
             return Promise.reject({ status: err.response.status, msg: err.message })
         })
 }
