@@ -10,6 +10,7 @@ import { Navbar } from './components/Navbar/Navbar';
 import { Error } from './components/Error/Error';
 import { getUsers } from '../APIs';
 import { Users } from './components/Users/Users';
+import { User } from './components/User/User';
 
 
 function App() {
@@ -75,6 +76,13 @@ function App() {
             <Users
               users={users}
             />}
+        />
+
+        <Route
+          path='/users/:username'
+          element={
+            <User />
+          }
         />
 
 
