@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getArticles, getUser } from '../../../APIs'
+import { getArticles, getCommentsByUser, getUser } from '../../../APIs'
 import './User.css'
 import { ArticleCard } from '../ArticleCard/ArticleCard'
 import { LoadingSpinner } from '../LoadingSpinner/LoadingSpinner'
-export const User = ({setError}) => {
+import { CommentCard } from '../CommentCard/CommentCard'
+export const User = ({ setError }) => {
     const [profileIsLoading, setProfileIsLoading] = useState(true)
     const [articlesAreLoading, setArticlesAreLoading] = useState(true)
+    const [commentsAreLoading, setCommentsAreLoading] = useState(true)
 
     const navigate = useNavigate()
     const [userProfile, setUserProfile] = useState({})
     const [userArticles, setUserArticles] = useState([])
+    const [userComments, setUserComments] = useState([])
     const { username } = useParams()
     useEffect(() => {
         getUser(username)
@@ -26,6 +29,11 @@ export const User = ({setError}) => {
                         setError(err)
                         navigate(`/error`)
                     })
+                getCommentsByUser(user.username)
+                .then((comments)=>{
+                    setUserComments(comments)
+                    setCommentsAreLoading(false)
+                })
             })
             .catch((err) => {
                 setError(err)
@@ -53,7 +61,12 @@ export const User = ({setError}) => {
             </section>
             <h2>Comments</h2>
             <section className='user-comments'>
-
+            {commentsAreLoading
+                    ? <LoadingSpinner />
+                    : userComments.map((comment) => {
+                        return <CommentCard
+                            key={comment.comment_id} comment={comment} user={userProfile}/>
+                    })}
             </section>
         </section>
     )

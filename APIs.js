@@ -100,3 +100,11 @@ export const getTopics = () => {
             return topics;
         });
 }
+
+export const getCommentsByUser = (user) => { 
+    return axios
+    .get(`https://nc-news-solo-kr.onrender.com/api/comments/by/${user}`)
+    .then(({ data: { comments } }) => {
+        return comments;
+    });
+}
