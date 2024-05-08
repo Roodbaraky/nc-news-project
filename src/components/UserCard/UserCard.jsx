@@ -6,8 +6,8 @@ export const UserCard = ({ user }) => {
         <div className='user-card-container'>
             <img className='user-img' src={user.avatar_url} alt="" />
             <div className='user-details'>
-                <p className='user-username'>{user.username}</p>
-                <p className='user-name'>{user.name}</p>
+                <p className='usercard-username'>{user.username}</p>
+                <p className='usercard-name'>{user.name}</p>
             </div>
         </div>
     )

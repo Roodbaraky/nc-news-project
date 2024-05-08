@@ -8,21 +8,22 @@ export const getUser = (username) => {
         });
 };
 
-export const getUsers = () => { 
+export const getUsers = () => {
     return axios
-    .get(`https://nc-news-solo-kr.onrender.com/api/users`)
-    .then(({data:{users}})=>{
-        return users
-    })
+        .get(`https://nc-news-solo-kr.onrender.com/api/users`)
+        .then(({ data: { users } }) => {
+            return users
+        })
 }
 
-export const getArticles = (searchTerm, sort_by, order) => {
+export const getArticles = (searchTerm, sort_by, order, author) => {
     return axios
         .get(`https://nc-news-solo-kr.onrender.com/api/articles`, {
             params: {
                 topic: searchTerm,
                 sort_by: sort_by,
-                order: order
+                order: order,
+                author: author
             }
         })
         .then(({ data: { articles } }) => {
