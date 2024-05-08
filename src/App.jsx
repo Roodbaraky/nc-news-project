@@ -9,6 +9,7 @@ import { Footer } from './components/Footer/Footer';
 import { Navbar } from './components/Navbar/Navbar';
 import { Error } from './components/Error/Error';
 import { getUsers } from '../APIs';
+import { Users } from './components/Users/Users';
 
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
   useEffect(() => {
     getUsers()
       .then((users) => {
-        setUsers(users.map((user)=>user.username))
+        setUsers(users)
       })
   }, [])
 
@@ -67,6 +68,13 @@ function App() {
               setError={setError}
             />
           }
+        />
+        <Route
+          path='/users'
+          element={
+            <Users
+              users={users}
+            />}
         />
 
 
