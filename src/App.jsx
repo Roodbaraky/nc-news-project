@@ -1,16 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react';
 import { Route, Routes } from "react-router-dom";
-import './App.css'
-import { Header } from './components/Header/Header'
-import { Home } from './components/Home/Home';
-import { Articles } from './components/Articles/Articles';
-import { Article } from './components/Article/Article';
-import { Footer } from './components/Footer/Footer';
-import { Navbar } from './components/Navbar/Navbar';
-import { Error } from './components/Error/Error';
-import { getUsers } from '../APIs';
-import { Users } from './components/Users/Users';
-import { User } from './components/User/User';
+import { Article } from './components/Article';
+import { Articles } from './components/Articles';
+import { Error } from './components/Error';
+import { Footer } from './components/Footer';
+import { Header } from './components/Header';
+import { Home } from './components/Home';
+import { Navbar } from './components/Navbar';
+import { User } from './components/User';
+import { Users } from './components/Users';
+import { getUsers } from './utils/APIs';
 
 
 function App() {
@@ -33,23 +32,19 @@ function App() {
 
 
   return (
-    <>
+    <div className='flex flex-col min-h-screen justify-items-center bg-bkg text-content'>
       <Header
-        Navbar={<Navbar
-          user={user}
-          setUser={setUser}
-          users={users}
-          setError={setError}
-
-
-        />} />
+        Navbar={
+          <Navbar
+            user={user}
+            setUser={setUser}
+            users={users}
+            setError={setError}
+          />
+        }
+      />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Home />
-          }
-        />
+        <Route path='/' element={<Home />} />
         <Route
           path='/articles'
           element={
@@ -60,7 +55,6 @@ function App() {
               setError={setError}
             />
           }
-
         />
         <Route
           path='/articles/:article_id'
@@ -75,33 +69,16 @@ function App() {
         />
         <Route
           path='/users'
-          element={
-            <Users
-              users={users}
-              
-            />}
+          element={<Users users={users} />}
         />
-
         <Route
           path='/users/:username'
-          element={
-            <User 
-            setError={setError}/>
-          }
+          element={<User setError={setError} />}
         />
-
-
-        <Route
-          path='*'
-          element={<Error
-            error={error} />} />
-
-
+        <Route path='*' element={<Error error={error} />} />
       </Routes>
       <Footer />
-
-
-    </>
+    </div>
   )
 }
 
