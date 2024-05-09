@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { CommentCard } from './CommentCard'
 import { getCommentsById } from '../utils/APIs'
 import { LoadingSpinner } from './LoadingSpinner'
+import { useErrorHandler } from '../utils/errorHandler'
 
 export const Comments = ({
     article_id,
@@ -13,6 +14,7 @@ export const Comments = ({
     user,
     setPostIndicator
 }) => {
+    const {triggerError, renderAlert} = useErrorHandler()
 
     const [isLoading, setIsLoading] = useState(true)
 
@@ -34,6 +36,7 @@ export const Comments = ({
                     <LoadingSpinner />
                 </div>
             ) : (<section>
+                 {renderAlert()}
                 {comments.map((comment) => {
                     return <CommentCard
                         comment={comment}
@@ -41,10 +44,14 @@ export const Comments = ({
                         user={user}
                         setPostIndicator={setPostIndicator}
                         postIndicator={postIndicator}
+                        triggerError={triggerError}
+                        
 
                     />
                 })}
+               
             </section>)}
+            
         </>
     )
 }

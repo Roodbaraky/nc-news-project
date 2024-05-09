@@ -12,6 +12,8 @@ import { Users } from './components/Users';
 import { getUsers } from './utils/APIs';
 
 
+
+
 function App() {
   const [articles, setArticles] = useState([])
   const [article, setArticle] = useState({})
@@ -25,14 +27,15 @@ function App() {
       .then((users) => {
         setUsers(users)
       })
-      .catch((err)=>{
-        
+      .catch((err) => {
+        alert('something really bad happened')
       })
   }, [])
 
 
   return (
     <div className='flex flex-col min-h-screen justify-items-center bg-bkg text-content'>
+      {/* {isAlertTriggered && <CustomAlert message={'test'} setIsAlertTriggered={setIsAlertTriggered} />} */}
       <Header
         Navbar={
           <Navbar
