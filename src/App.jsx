@@ -35,7 +35,7 @@ function App() {
 
   return (
     <div className='flex flex-col min-h-screen justify-items-center bg-bkg text-content'>
-      {/* {isAlertTriggered && <CustomAlert message={'test'} setIsAlertTriggered={setIsAlertTriggered} />} */}
+  
       <Header
         Navbar={
           <Navbar

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import '../../src/spinkit.min.css'
 import { Comments } from './Comments'
 import { LoadingSpinner } from './LoadingSpinner'
 import { getArticleById, patchArticleVotes, postArticleComment } from '../utils/APIs'
+import { useErrorHandler } from '../utils/errorHandler'
 
 import moment from 'moment'
 export const Article = ({ article, setArticle, user, setError }) => {
@@ -17,6 +18,7 @@ export const Article = ({ article, setArticle, user, setError }) => {
     let [upVoted, setUpVoted] = useState(false)
     let [downVoted, setDownVoted] = useState(false)
     const navigate = useNavigate()
+    const {renderAlert, triggerError} = useErrorHandler()
 
 
 
@@ -54,7 +56,7 @@ export const Article = ({ article, setArticle, user, setError }) => {
             patchArticleVotes(article_id, voteBody)
                 .then(() => { })
                 .catch(() => {
-                    alert('Error contacting the server')
+                    triggerError('Error contacting the server')
                 })
         }
     }
@@ -69,7 +71,7 @@ export const Article = ({ article, setArticle, user, setError }) => {
                 username: user.username || 'jessjelly',
                 body: e.target.parentElement.children[0].value
             }
-            if (commentBody.body.length) {
+            if (commentBody.body) {
                 postArticleComment(article_id, commentBody).then(() => {
                     setPostIndicator(++postIndicator)
                     setPosting(false)
@@ -82,9 +84,9 @@ export const Article = ({ article, setArticle, user, setError }) => {
             }
             else {
                 if (commentBody.username) {
-                    alert('You can\'t post an empty comment')
+                    triggerError('You can\'t post an empty comment')
                 } else {
-                    alert('You must be signed in to post a comment')
+                    triggerError('You must be signed in to post a comment')
                 }
 
             }
@@ -93,6 +95,7 @@ export const Article = ({ article, setArticle, user, setError }) => {
 
     return (
         <article className="article max-w-4xl mx-auto bg-bkg-1/40 rounded-lg shadow-md p-6 mb-6 mt-20">
+            
             {isLoading ? (
                 <LoadingSpinner />
             ) : (
@@ -124,9 +127,12 @@ export const Article = ({ article, setArticle, user, setError }) => {
                     <div className="comment-button text-center">
                         <button className="bg-bkg text-content underline underline-offset-4 hover:bg-accent-2 font-bold py-2 px-4 rounded" onClick={comment}>Leave a comment</button>
                     </div>
+                    
                     {leaveComment && (
                         <section className="comment-container mt-4 block text-end">
+                            {renderAlert()}
                             <textarea name="comment-box" id="comment-box" rows={5} className="w-full bg-bkg rounded-lg p-2 mb-2" placeholder="Write your comment here...">
+                            
                             </textarea>
 
                             <button className="post-comment-button bg-accent-1 text-content hover:bg-accent-2 font-bold py-2 px-4 rounded text-center" onClick={postComment}>Post</button>
@@ -143,6 +149,7 @@ export const Article = ({ article, setArticle, user, setError }) => {
                     />
                 </>
             )}
+            
         </article>
 
     )
