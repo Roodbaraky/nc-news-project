@@ -5,6 +5,7 @@ import { CommentCard } from './CommentCard'
 import { getCommentsById } from '../utils/APIs'
 import { LoadingSpinner } from './LoadingSpinner'
 import { useErrorHandler } from '../utils/errorHandler'
+import { AltCommentCard } from './AltCommentCard'
 
 export const Comments = ({
     article_id,
@@ -12,7 +13,8 @@ export const Comments = ({
     comments,
     setComments,
     user,
-    setPostIndicator
+    setPostIndicator,
+    users,
 }) => {
     const {triggerError, renderAlert} = useErrorHandler()
 
@@ -30,21 +32,22 @@ export const Comments = ({
 
 
     return (
-        <>
+        <section className='w-fit'>
             {isLoading ? (
                 <div className="flex justify-center">
                     <LoadingSpinner />
                 </div>
-            ) : (<section>
+            ) : (<section className=' mx-auto'>
                  {renderAlert()}
                 {comments.map((comment) => {
-                    return <CommentCard
+                    return <AltCommentCard
                         comment={comment}
                         key={comment.comment_id}
                         user={user}
                         setPostIndicator={setPostIndicator}
                         postIndicator={postIndicator}
                         triggerError={triggerError}
+                        users={users}
                         
 
                     />
@@ -52,6 +55,6 @@ export const Comments = ({
                
             </section>)}
             
-        </>
+        </section>
     )
 }

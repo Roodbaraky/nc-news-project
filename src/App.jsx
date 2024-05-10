@@ -12,8 +12,6 @@ import { Users } from './components/Users';
 import { getUsers } from './utils/APIs';
 
 
-
-
 function App() {
   const [articles, setArticles] = useState([])
   const [article, setArticle] = useState({})
@@ -34,8 +32,7 @@ function App() {
 
 
   return (
-    <div className='flex flex-col min-h-screen justify-items-center bg-bkg text-content'>
-  
+    <section id='app-container' className='flex flex-col h-full w-full align-items-center bg-bkg text-content'>
       <Header
         Navbar={
           <Navbar
@@ -67,6 +64,7 @@ function App() {
               setArticle={setArticle}
               user={user}
               setError={setError}
+              users={users}
             />
           }
         />
@@ -81,7 +79,7 @@ function App() {
         <Route path='*' element={<Error error={error} />} />
       </Routes>
       <Footer />
-    </div>
+    </section>
   )
 }
 

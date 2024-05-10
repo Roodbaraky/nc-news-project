@@ -7,7 +7,7 @@ import { getArticleById, patchArticleVotes, postArticleComment } from '../utils/
 import { useErrorHandler } from '../utils/errorHandler'
 
 import moment from 'moment'
-export const Article = ({ article, setArticle, user, setError }) => {
+export const Article = ({ article, setArticle, user, setError, users }) => {
     let { article_id } = useParams()
     const [isLoading, setIsLoading] = useState(true)
     const [leaveComment, setLeaveComment] = useState(false)
@@ -18,7 +18,7 @@ export const Article = ({ article, setArticle, user, setError }) => {
     let [upVoted, setUpVoted] = useState(false)
     let [downVoted, setDownVoted] = useState(false)
     const navigate = useNavigate()
-    const {renderAlert, triggerError} = useErrorHandler()
+    const { renderAlert, triggerError } = useErrorHandler()
 
 
 
@@ -94,48 +94,66 @@ export const Article = ({ article, setArticle, user, setError }) => {
     }
 
     return (
-        <article className="article max-w-4xl mx-auto bg-bkg-1/40 rounded-lg shadow-md p-6 mb-6 mt-20">
-            
-            {isLoading ? (
-                <LoadingSpinner />
-            ) : (
-                <>
-                    <h3 className="title text-xl font-bold mb-0">{article.title}</h3>
-                    <div className=' w-full flex flex-wrap gap-3 mx-auto '>
-                        <p className="topic text-accent-1 font-bold m-0">{article.topic}</p>
-                        <p className="author text-content mb-2">{article.author}</p>
+        <section id='article-container' className='h-full'>
+            {isLoading
+                ? <LoadingSpinner />
+                : <article id='article' className="flex flex-col items-center w-4/5 mx-auto bg-bkg-1/40 rounded-lg shadow-md  mb-6 mt-32 h-full">
+                    <h3 id='article-title' className="self-start title text-2xl sm:text-3xl font-bold mb-0">{article.title}
+                    </h3>
+
+                    <div id='author-and-options' className='self-start flex gap-2'>
+                        <p id='article-topic' className=" text-accent-1 font-bold m-0">
+                            {article.topic}
+                        </p>
+                        <p id='article-author' className="text-content mb-2">
+                            {article.author}
+                        </p>
                     </div>
 
-                    {user.username === article.author && (
-                        <div className="post-buttons mb-4 text-end">
-                            <button className="bg-accent-1 text-content hover:bg-accent-2 font-bold py-2 px-4 rounded mr-2">
+
+                    {user.username === article.author &&
+                        <div id='article-buttons' className="mb-2 self-end">
+                            <button id='edit-button' className="bg-accent-1 text-content hover:bg-accent-2 font-bold py-2 px-4 rounded-full mr-2">
                                 Edit
                             </button>
-                            <button className="bg-accent-3 text-content hover:bg-accent-1 font-bold py-2 px-4 rounded">
+                            <button id='delete-button' className="bg-accent-3 text-content hover:bg-accent-1 font-bold py-2 px-4 rounded-full">
                                 Delete
                             </button>
                         </div>
-                    )}
-                    <img src={article.article_img_url} alt={`image associated with ${article.title}`} className=" w-full mb-4 rounded-lg" />
-                    <p className="mb-4 text-content">{article.body}</p>
-                    <p className="text-content">{moment(article.created_at).format('DD/MM/YY, h:mm:ss a')}</p>
-                    <div className="vote-buttons  items-center text-end mb-4 mt-3">
-                        <button className="bg-accent-1 text-content hover:bg-accent-2 font-bold py-2 px-4 rounded mr-2" onClick={vote}>UP</button>
-                        <span className="text-xl font-bold">{votes}</span>
-                        <button className="bg-accent-1 text-content hover:bg-accent-2 font-bold py-2 px-4 rounded ml-2" onClick={vote}>DOWN</button>
+                    }
+                    <img id='article-img' src={article.article_img_url} alt={`image associated with ${article.title}`} className=" w-full mb-4 rounded-lg" />
+                    <p id='article-body' className="mb-4 text-content">
+                        {article.body}
+                    </p>
+                    <p id='article-date' className="self-end text-content">
+                        {moment(article.created_at).format('DD/MM/YY, h:mm:ss a')}
+                    </p>
+                    <div id='vote-buttons' className="self-end text-end mb-4 mt-3">
+                        <button id='upvote-button' className="bg-accent-1 text-content hover:bg-accent-2 font-bold py-2 px-4 rounded-full mr-2" onClick={vote}>
+                            UP
+                        </button>
+                        <span id='votes' className="text-xl ">
+                            {votes}
+                        </span>
+                        <button id='downvote-button' className="bg-accent-1 text-content hover:bg-accent-2 font-bold py-2 px-4 rounded-full ml-2" onClick={vote}>
+                            DOWN
+                        </button>
                     </div>
-                    <div className="comment-button text-center">
-                        <button className="bg-bkg text-content underline underline-offset-4 hover:bg-accent-2 font-bold py-2 px-4 rounded" onClick={comment}>Leave a comment</button>
+                    <div id='comment-button' className="text-center">
+                        <button className="bg-bkg text-content underline underline-offset-4 hover:no-underline font-bold py-2 px-4 rounded" onClick={comment}>
+                            Leave a comment
+                        </button>
                     </div>
-                    
+
                     {leaveComment && (
-                        <section className="comment-container mt-4 block text-end">
+                        <section id='comment-container' className=" mt-4 block text-end">
                             {renderAlert()}
                             <textarea name="comment-box" id="comment-box" rows={5} className="w-full bg-bkg rounded-lg p-2 mb-2" placeholder="Write your comment here...">
-                            
                             </textarea>
 
-                            <button className="post-comment-button bg-accent-1 text-content hover:bg-accent-2 font-bold py-2 px-4 rounded text-center" onClick={postComment}>Post</button>
+                            <button id='post-comment-button' className="bg-accent-1 text-content hover:bg-accent-2 font-bold py-2 px-4 rounded-full text-center" onClick={postComment}>
+                                Post
+                            </button>
                         </section>
                     )}
                     {!leaveComment && posting && <LoadingSpinner />}
@@ -146,11 +164,10 @@ export const Article = ({ article, setArticle, user, setError }) => {
                         setPostIndicator={setPostIndicator}
                         article={article}
                         user={user}
+                        users={users}
                     />
-                </>
-            )}
-            
-        </article>
-
+                </article >
+            }
+        </section>
     )
 }

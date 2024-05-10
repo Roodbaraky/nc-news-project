@@ -59,7 +59,7 @@ export const Articles = ({ articles, setArticles, setError }) => {
     }, [searchTopic, sortBy, order, limit, p])
 
     return (
-        <section className='mt-28 p-2 flex-col place-content-center place-items-center w-screen'>
+        <section id='articles-container' className=' mt-28 p-2 flex-col place-content-center place-items-center w-full h-screen'>
             <div className="sort-filter-bar flex flex-wrap justify-center gap-4 rounded-lg p-4 mb-3 bg-accent-1/40 shadow-md w-full">
                 <label htmlFor="" className="flex items-center">
                     Topic:
