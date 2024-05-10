@@ -41,7 +41,7 @@ export const User = ({ setError }) => {
             })
     }, [username])
     return (
-        <section className='mt-28 user-profile-container bg-bkg-1/90 rounded-lg shadow-md p-4 flex flex-col place-items-center'>
+        <section className='mt-28 user-profile-container bg-bkg-1/90 rounded-lg shadow-md p-4 flex flex-col place-items-center h-full min-h-screen'>
             {profileIsLoading ? (
                 <LoadingSpinner />
             ) : (
