@@ -8,7 +8,7 @@ export const Footer = () => {
     })
   }
   return (
-    <footer className="shadow-lg">
+    <footer className="shadow-lg bottom-0">
       <div className="container mx-auto px-4">
         <hr className="my-8" />
         <div className="text-center">

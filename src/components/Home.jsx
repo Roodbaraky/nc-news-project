@@ -19,7 +19,7 @@ export const Home = () => {
   }, [])
 
   return (
-    <section id='home-container' className=' w-full h-screen'>
+    <section id='home-container' className=' w-full h-full min-h-screen'>
       <section id='carousel-container' className="py-12 px-4 mt-20 container mx-auto p-5 flex flex-col items-center">
         <h2 id='carousel-title' className="text-3xl font-bold mb-8 self-start">Featured Articles</h2>
         {isLoading

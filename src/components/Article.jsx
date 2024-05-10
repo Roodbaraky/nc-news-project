@@ -94,7 +94,7 @@ export const Article = ({ article, setArticle, user, setError, users }) => {
     }
 
     return (
-        <section id='article-container' className='h-full'>
+        <section id='article-container' className='h-full min-h-screen'>
             {isLoading
                 ? <LoadingSpinner />
                 : <article id='article' className="flex flex-col items-center w-4/5 mx-auto bg-bkg-1/40 rounded-lg shadow-md  mb-6 mt-32 h-full">
