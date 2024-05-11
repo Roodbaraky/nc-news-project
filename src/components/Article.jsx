@@ -46,11 +46,21 @@ export const Article = ({ article, setArticle, user, setError, users }) => {
             setDownVoted(false)
             setVotes(++votes)
         }
+        if (e.target.innerText === 'UP' && upVoted) {
+            voteBody = { inc_votes: 1 }
+            setUpVoted(false)
+            setVotes(--votes)
+        }
         if (e.target.innerText === 'DOWN' && !downVoted) {
             voteBody = { inc_votes: -1 }
             setDownVoted(true)
             setUpVoted(false)
             setVotes(--votes)
+        }
+        if (e.target.innerText === 'DOWN' && downVoted) {
+            voteBody = { inc_votes: -1 }
+            setDownVoted(false)
+            setVotes(++votes)
         }
         if (voteBody) {
             patchArticleVotes(article_id, voteBody)

@@ -22,33 +22,38 @@ export const AltCommentCard = ({ comment, user, users, setPostIndicator, postInd
     }
     const voteOnComment = (e) => {
         const voteBody = { inc_votes: 0 }
-        if (e.target.id === 'upvote' && !upVoted) {
-            voteBody.inc_votes = 1
-            setUpVoted(true)
-            setDownVoted(false)
-        }
-        if (e.target.id === 'upvote' && upVoted){
-            voteBody.inc_votes = -1
-            setUpVoted(false)
-        }
-        if (e.target.id === 'downvote' && downVoted){
-            voteBody.inc_votes = 1
-            setDownVoted(false)
-        }
-        if (e.target.id === 'downvote' && !downVoted) {
-            voteBody.inc_votes = -1
-            setDownVoted(true)
-            setUpVoted(false)
-        }
 
-        if (voteBody.inc_votes !== 0) {
-            postCommentVote(comment.comment_id, voteBody)
-            .then(() => { })
-            .catch(() => {
+        if (comment.author !== user.username) {
+            if (e.target.id === 'upvote' && !upVoted) {
+                voteBody.inc_votes = 1
+                setUpVoted(true)
                 setDownVoted(false)
+            }
+            if (e.target.id === 'upvote' && upVoted) {
+                voteBody.inc_votes = -1
                 setUpVoted(false)
-                triggerError('Failed to cast vote')
-            })
+            }
+            if (e.target.id === 'downvote' && downVoted) {
+                voteBody.inc_votes = 1
+                setDownVoted(false)
+            }
+            if (e.target.id === 'downvote' && !downVoted) {
+                voteBody.inc_votes = -1
+                setDownVoted(true)
+                setUpVoted(false)
+            }
+
+            if (voteBody.inc_votes !== 0) {
+                postCommentVote(comment.comment_id, voteBody)
+                    .then(() => { })
+                    .catch(() => {
+                        setDownVoted(false)
+                        setUpVoted(false)
+                        triggerError('Failed to cast vote')
+                    })
+            }
+        }else{
+            triggerError('You can\'t vote on your own comment!')
         }
 
     }
