@@ -72,7 +72,6 @@ export const patchArticleVotes = (article_id, reqBody) => {
 }
 
 export const postArticleComment = (article_id, reqBody) => {
-
     return axios
         .post(`https://nc-news-solo-kr.onrender.com/api/articles/${article_id}/comments`, reqBody)
         .then(({ data }) => {
@@ -107,4 +106,10 @@ export const getCommentsByUser = (user) => {
         .then(({ data: { comments } }) => {
             return comments;
         });
+}
+
+export const postCommentVote = (comment_id, reqBody) => {
+    return axios
+        .patch(`https://nc-news-solo-kr.onrender.com/api/comments/${comment_id}`,
+            reqBody)
 }
