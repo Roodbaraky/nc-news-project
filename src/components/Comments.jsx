@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 
 import { useEffect, useState } from 'react'
-import { CommentCard } from './CommentCard'
 import { getCommentsById } from '../utils/APIs'
 import { LoadingSpinner } from './LoadingSpinner'
 import { useErrorHandler } from '../utils/errorHandler'
@@ -28,7 +27,7 @@ export const Comments = ({
                 setIsLoading(false)
             })
     // eslint-disable-next-line react-hooks/exhaustive-deps, react/jsx-key
-    }, [postIndicator, <CommentCard />])
+    }, [postIndicator, <AltCommentCard/>])
 
 
     return (
