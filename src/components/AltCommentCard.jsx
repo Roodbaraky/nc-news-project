@@ -1,7 +1,7 @@
 import { deleteArticleComment, postCommentVote } from '../utils/APIs'
 import moment from 'moment'
 import { useErrorHandler } from '../utils/errorHandler'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 
@@ -10,9 +10,13 @@ export const AltCommentCard = ({ comment, user, users, setPostIndicator, postInd
     const { triggerError, renderAlert } = useErrorHandler()
     const [upVoted, setUpVoted] = useState(false)
     const [downVoted, setDownVoted] = useState(false)
+    let [votes, setVotes] = useState(0)
+    useEffect(() => {
+        setVotes(comment.votes)
+    }, [])
+
 
     const deleteComment = () => {
-
         deleteArticleComment(comment.comment_id)
             .then(() => {
                 setPostIndicator(++postIndicator)
@@ -22,41 +26,42 @@ export const AltCommentCard = ({ comment, user, users, setPostIndicator, postInd
             }
             )
     }
+
     const voteOnComment = (e) => {
         const voteBody = { inc_votes: 0 }
-
         if (comment.author !== user.username) {
-
             if (e.target.id === 'upvote') {
                 if (!upVoted && !downVoted) {
                     voteBody.inc_votes = 1
+                    setVotes(++votes)
                     setUpVoted(true)
                 }
                 if (upVoted) {
                     setUpVoted(false)
+                    setVotes(--votes)
                     voteBody.inc_votes = -1
                 }
-                if(downVoted){
+                if (downVoted) {
                     setUpVoted(true)
                     setDownVoted(false)
+                    setVotes(votes + 2)
                     voteBody.inc_votes = 2
                 }
-
-
             }
-
-
             if (e.target.id === 'downvote') {
                 if (!downVoted && !upVoted) {
                     voteBody.inc_votes = -1
+                    setVotes(--votes)
                     setDownVoted(true)
                 }
                 if (downVoted) {
                     voteBody.inc_votes = 1
+                    setVotes(++votes)
                     setDownVoted(false)
                 }
                 if (upVoted) {
                     voteBody.inc_votes = -2
+                    setVotes(votes - 2)
                     setDownVoted(true)
                     setUpVoted(false)
                 }
@@ -99,7 +104,7 @@ export const AltCommentCard = ({ comment, user, users, setPostIndicator, postInd
                         <div className="mt-2 sm:flex sm:items-center sm:gap-2">
                             <div className="flex items-center gap-1 text-accent-3">
                                 <button id='upvote' onClick={voteOnComment} className="bg-accent-1 text-content hover:bg-accent-2  py-2 px-4 rounded-full mx-2 " >UP</button>
-                                <p className="text-m">{comment.votes}</p>
+                                <p className="text-m">{votes}</p>
                                 <button id='downvote' onClick={voteOnComment} className="bg-accent-1 text-content hover:bg-accent-2  py-2 px-4 rounded-full w-fit mx-2" >DOWN</button>
 
                             </div>

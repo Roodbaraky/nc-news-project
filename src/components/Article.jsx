@@ -15,8 +15,8 @@ export const Article = ({ article, setArticle, user, setError, users }) => {
     let [postIndicator, setPostIndicator] = useState(0)
     let [votes, setVotes] = useState(0)
     const [comments, setComments] = useState([])
-    let [upVoted, setUpVoted] = useState(false)
-    let [downVoted, setDownVoted] = useState(false)
+    const [upVoted, setUpVoted] = useState(false)
+    const [downVoted, setDownVoted] = useState(false)
     const navigate = useNavigate()
     const { renderAlert, triggerError } = useErrorHandler()
 
@@ -38,31 +38,48 @@ export const Article = ({ article, setArticle, user, setError, users }) => {
 
 
     const vote = (e) => {
+        const voteBody = { inc_votes: 0 }
 
-        let voteBody
-        if (e.target.innerText === 'UP' && !upVoted) {
-            voteBody = { inc_votes: 1 }
-            setUpVoted(true)
-            setDownVoted(false)
-            setVotes(++votes)
+        if (article.author !== user.username) {
+            if (e.target.id === 'upvote') {
+                if (!upVoted && !downVoted) {
+                    voteBody.inc_votes = 1
+                    setVotes(++votes)
+                    setUpVoted(true)
+                }
+                if (upVoted) {
+                    setUpVoted(false)
+                    setVotes(--votes)
+                    voteBody.inc_votes = -1
+                }
+                if (downVoted) {
+                    setUpVoted(true)
+                    setDownVoted(false)
+                    setVotes(votes + 2)
+                    voteBody.inc_votes = 2
+                }
+            }
+            if (e.target.id === 'downvote') {
+                if (!downVoted && !upVoted) {
+                    voteBody.inc_votes = -1
+                    setVotes(--votes)
+                    setDownVoted(true)
+                }
+                if (downVoted) {
+                    voteBody.inc_votes = 1
+                    setVotes(++votes)
+                    setDownVoted(false)
+                }
+                if (upVoted) {
+                    voteBody.inc_votes = -2
+                    setVotes(votes - 2)
+                    setDownVoted(true)
+                    setUpVoted(false)
+                }
+            }
+
         }
-        if (e.target.innerText === 'UP' && upVoted) {
-            voteBody = { inc_votes: 1 }
-            setUpVoted(false)
-            setVotes(--votes)
-        }
-        if (e.target.innerText === 'DOWN' && !downVoted) {
-            voteBody = { inc_votes: -1 }
-            setDownVoted(true)
-            setUpVoted(false)
-            setVotes(--votes)
-        }
-        if (e.target.innerText === 'DOWN' && downVoted) {
-            voteBody = { inc_votes: -1 }
-            setDownVoted(false)
-            setVotes(++votes)
-        }
-        if (voteBody) {
+        if (voteBody.inc_votes !== 0) {
             patchArticleVotes(article_id, voteBody)
                 .then(() => { })
                 .catch(() => {
@@ -139,13 +156,13 @@ export const Article = ({ article, setArticle, user, setError, users }) => {
                         {moment(article.created_at).format('DD/MM/YY, h:mm:ss a')}
                     </p>
                     <div id='vote-buttons' className="self-end text-end mb-4 mt-3">
-                        <button id='upvote-button' className="bg-accent-1 text-content hover:bg-accent-2 font-bold py-2 px-4 rounded-full mr-2" onClick={vote}>
+                        <button id='upvote' className="bg-accent-1 text-content hover:bg-accent-2 font-bold py-2 px-4 rounded-full mr-2" onClick={vote}>
                             UP
                         </button>
                         <span id='votes' className="text-xl ">
                             {votes}
                         </span>
-                        <button id='downvote-button' className="bg-accent-1 text-content hover:bg-accent-2 font-bold py-2 px-4 rounded-full ml-2" onClick={vote}>
+                        <button id='downvote' className="bg-accent-1 text-content hover:bg-accent-2 font-bold py-2 px-4 rounded-full ml-2" onClick={vote}>
                             DOWN
                         </button>
                     </div>
