@@ -32,6 +32,7 @@ export const Articles = ({ articles, setArticles, setError }) => {
     },[p, limit, totalCount])
 
     const showMore = () => {
+        setIsLoading(true)
         if (isMoreResults) {
             const nextPage = p + 1;
             setP(nextPage);
@@ -67,6 +68,7 @@ export const Articles = ({ articles, setArticles, setError }) => {
 
 
     useEffect(() => {
+        setIsLoading(true)
         if (!topic) {
             setSearchTopic('')
         }
@@ -129,6 +131,7 @@ export const Articles = ({ articles, setArticles, setError }) => {
                     ))
                 )}
             </div>
+            {isLoading&&<LoadingSpinner/>}
             {limit <= totalCount && isMoreResults && <button id='show-more' onClick={showMore} className="bg-accent-1 text-content hover:bg-accent-2  py-2 px-4 rounded-full w-fit mx-auto self-center">Show More</button>}
         </section>
     )

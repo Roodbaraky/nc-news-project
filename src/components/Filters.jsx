@@ -1,12 +1,24 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const Filters = ({ searchTopic, topics, sortBy, order, limit, p, totalCount, pArr, setSearchTopic, setIsLoading, setSortBy, setOrder, setLimit, setP}) => {
+export const Filters = ({
+    searchTopic,
+    topics,
+    sortBy,
+    order,
+    limit,
+    totalCount,
+    pArr,
+    setSearchTopic,
+    setIsLoading,
+    setSortBy,
+    setOrder,
+    setLimit,
+    setP
+}) => {
     const navigate = useNavigate()
 
-    useEffect(() => {
-
-    }, [pArr])
+   
     return (
         <div id='sort-filter-bar' className=" flex flex-wrap justify-center gap-4 rounded-lg p-4 mb-3 bg-accent-1/40 shadow-md w-full">
             <label htmlFor="" className="flex items-center">
@@ -15,6 +27,7 @@ export const Filters = ({ searchTopic, topics, sortBy, order, limit, p, totalCou
                     className="select-bg bg-transparent border border-gray-300 rounded-md px-2 py-1"
                     defaultValue={searchTopic || ""}
                     onChange={(e) => {
+                        setIsLoading(true)
                         setP('1')
                         setSearchTopic(e.target.value);
                         if (e.target.value.length) {
@@ -27,7 +40,7 @@ export const Filters = ({ searchTopic, topics, sortBy, order, limit, p, totalCou
                 >
                     <option value="">All</option>
                     {topics.map((topic) => (
-                        <option  key={topic.slug} value={topic.slug}>
+                        <option key={topic.slug} value={topic.slug}>
                             {topic.slug}
                         </option>
                     ))}
@@ -38,7 +51,9 @@ export const Filters = ({ searchTopic, topics, sortBy, order, limit, p, totalCou
                 <select
                     className="select-bg bg-transparent border border-gray-300 rounded-md px-2 py-1"
                     defaultValue={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
+                    onChange={(e) => {
+                        setIsLoading(true)
+                        setSortBy(e.target.value)}}
                 >
                     <option value="created_at">date</option>
                     <option value="comment_count">comments</option>
@@ -50,18 +65,22 @@ export const Filters = ({ searchTopic, topics, sortBy, order, limit, p, totalCou
                 <select
                     className="select-bg bg-transparent border border-gray-300 rounded-md px-2 py-1"
                     defaultValue={order}
-                    onChange={(e) => setOrder(e.target.value)}
+                    onChange={(e) => {
+                        setIsLoading(true)
+                        setOrder(e.target.value)}}
                 >
                     <option value="DESC">DESC</option>
                     <option value="ASC">ASC</option>
                 </select>
             </label>
             <label htmlFor="" className="flex items-center">
-                Results per Page: 
+                Results per Page:
                 <select
                     className="select-bg bg-transparent border border-gray-300 rounded-md px-2 py-1"
                     defaultValue={limit}
-                    onChange={(e) => setLimit(e.target.value)}
+                    onChange={(e) => {
+                        setIsLoading(true)
+                        setLimit(e.target.value)}}
                 >
                     <option value="5">5</option>
                     <option value="10">10</option>
@@ -69,19 +88,6 @@ export const Filters = ({ searchTopic, topics, sortBy, order, limit, p, totalCou
                     <option value={totalCount || "100"}>ALL</option>
                 </select>
             </label>
-            {/* <label htmlFor="" className="flex items-center">
-                Page:
-                <select
-                    className="select-bg bg-transparent border border-gray-300 rounded-md px-2 py-1"
-                    defaultValue="1"
-                    onChange={(e) => setP(e.target.value)}
-                >
-                    <option value="1">1</option>
-                    {pArr.length > 1
-                        ? pArr.map((x) => <option key={x}>{x}</option>)
-                        : ""}
-                </select>
-            </label> */}
         </div>
     )
 }
