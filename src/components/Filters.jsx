@@ -1,7 +1,12 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const Filters = ({ searchTopic, topics, sortBy, order, limit, p, totalCount, pArr, setSearchTopic, setIsLoading,setSortBy,setOrder, setLimit, setP }) => {
+export const Filters = ({ searchTopic, topics, sortBy, order, limit, p, totalCount, pArr, setSearchTopic, setIsLoading, setSortBy, setOrder, setLimit, setP}) => {
     const navigate = useNavigate()
+
+    useEffect(() => {
+
+    }, [pArr])
     return (
         <div id='sort-filter-bar' className=" flex flex-wrap justify-center gap-4 rounded-lg p-4 mb-3 bg-accent-1/40 shadow-md w-full">
             <label htmlFor="" className="flex items-center">
@@ -10,6 +15,7 @@ export const Filters = ({ searchTopic, topics, sortBy, order, limit, p, totalCou
                     className="select-bg bg-transparent border border-gray-300 rounded-md px-2 py-1"
                     defaultValue={searchTopic || ""}
                     onChange={(e) => {
+                        setP('1')
                         setSearchTopic(e.target.value);
                         if (e.target.value.length) {
                             setIsLoading(true);
@@ -21,7 +27,7 @@ export const Filters = ({ searchTopic, topics, sortBy, order, limit, p, totalCou
                 >
                     <option value="">All</option>
                     {topics.map((topic) => (
-                        <option key={topic.slug} value={topic.slug}>
+                        <option  key={topic.slug} value={topic.slug}>
                             {topic.slug}
                         </option>
                     ))}
@@ -51,7 +57,7 @@ export const Filters = ({ searchTopic, topics, sortBy, order, limit, p, totalCou
                 </select>
             </label>
             <label htmlFor="" className="flex items-center">
-                Limit:
+                Results per Page: 
                 <select
                     className="select-bg bg-transparent border border-gray-300 rounded-md px-2 py-1"
                     defaultValue={limit}
@@ -63,7 +69,7 @@ export const Filters = ({ searchTopic, topics, sortBy, order, limit, p, totalCou
                     <option value={totalCount || "100"}>ALL</option>
                 </select>
             </label>
-            <label htmlFor="" className="flex items-center">
+            {/* <label htmlFor="" className="flex items-center">
                 Page:
                 <select
                     className="select-bg bg-transparent border border-gray-300 rounded-md px-2 py-1"
@@ -75,7 +81,7 @@ export const Filters = ({ searchTopic, topics, sortBy, order, limit, p, totalCou
                         ? pArr.map((x) => <option key={x}>{x}</option>)
                         : ""}
                 </select>
-            </label>
+            </label> */}
         </div>
     )
 }
