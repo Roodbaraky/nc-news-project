@@ -11,6 +11,8 @@ export const AltCommentCard = ({ comment, user, users, setPostIndicator, postInd
     const [upVoted, setUpVoted] = useState(false)
     const [downVoted, setDownVoted] = useState(false)
     let [votes, setVotes] = useState(0)
+    const navigate = useNavigate()
+
     useEffect(() => {
         setVotes(comment.votes)
     }, [])
@@ -90,6 +92,7 @@ export const AltCommentCard = ({ comment, user, users, setPostIndicator, postInd
                 <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
                     <a href="#" className="block shrink-0">
                         <img
+                            onClick={() => { navigate(`/users/${comment.author}`) }}
                             alt=""
                             src={users.filter((user) => user.username === comment.author)[0].avatar_url}
                             className="size-14 rounded-lg object-cover"
@@ -114,7 +117,7 @@ export const AltCommentCard = ({ comment, user, users, setPostIndicator, postInd
                 <div>
                     <p className="text-xs text-content flex gap-2 ms-5 flex-wrap">
                         Posted by
-                        <a href="#" className="font-medium underline hover:text-gray-700"> {comment.author}</a>{moment(comment.created_at).format('DD/MM/YY, h:mm:ss a')}
+                        <a onClick={() => { navigate(`/users/${comment.author}`) }} href='#' className="font-medium underline hover:text-gray-700"> {comment.author}</a>{moment(comment.created_at).format('DD/MM/YY, h:mm:ss a')}
                     </p>
                     {user.username === comment.author && <div id='delete-button' className="flex justify-end">
                         <strong
