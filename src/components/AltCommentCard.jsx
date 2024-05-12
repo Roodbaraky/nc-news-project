@@ -2,12 +2,14 @@ import { deleteArticleComment, postCommentVote } from '../utils/APIs'
 import moment from 'moment'
 import { useErrorHandler } from '../utils/errorHandler'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 
 
 export const AltCommentCard = ({ comment, user, users, setPostIndicator, postIndicator }) => {
     const { triggerError, renderAlert } = useErrorHandler()
-    let [upVoted, setUpVoted] = useState(false)
-    let [downVoted, setDownVoted] = useState(false)
+    const [upVoted, setUpVoted] = useState(false)
+    const [downVoted, setDownVoted] = useState(false)
 
     const deleteComment = () => {
 
@@ -24,24 +26,42 @@ export const AltCommentCard = ({ comment, user, users, setPostIndicator, postInd
         const voteBody = { inc_votes: 0 }
 
         if (comment.author !== user.username) {
-            if (e.target.id === 'upvote' && !upVoted) {
-                voteBody.inc_votes = 1
-                setUpVoted(true)
-                setDownVoted(false)
+
+            if (e.target.id === 'upvote') {
+                if (!upVoted && !downVoted) {
+                    voteBody.inc_votes = 1
+                    setUpVoted(true)
+                }
+                if (upVoted) {
+                    setUpVoted(false)
+                    voteBody.inc_votes = -1
+                }
+                if(downVoted){
+                    setUpVoted(true)
+                    setDownVoted(false)
+                    voteBody.inc_votes = 2
+                }
+
+
             }
-            if (e.target.id === 'upvote' && upVoted) {
-                voteBody.inc_votes = -1
-                setUpVoted(false)
+
+
+            if (e.target.id === 'downvote') {
+                if (!downVoted && !upVoted) {
+                    voteBody.inc_votes = -1
+                    setDownVoted(true)
+                }
+                if (downVoted) {
+                    voteBody.inc_votes = 1
+                    setDownVoted(false)
+                }
+                if (upVoted) {
+                    voteBody.inc_votes = -2
+                    setDownVoted(true)
+                    setUpVoted(false)
+                }
             }
-            if (e.target.id === 'downvote' && downVoted) {
-                voteBody.inc_votes = 1
-                setDownVoted(false)
-            }
-            if (e.target.id === 'downvote' && !downVoted) {
-                voteBody.inc_votes = -1
-                setDownVoted(true)
-                setUpVoted(false)
-            }
+
 
             if (voteBody.inc_votes !== 0) {
                 postCommentVote(comment.comment_id, voteBody)
@@ -52,7 +72,7 @@ export const AltCommentCard = ({ comment, user, users, setPostIndicator, postInd
                         triggerError('Failed to cast vote')
                     })
             }
-        }else{
+        } else {
             triggerError('You can\'t vote on your own comment!')
         }
 
