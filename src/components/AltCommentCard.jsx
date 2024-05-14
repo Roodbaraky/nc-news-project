@@ -88,7 +88,7 @@ export const AltCommentCard = ({ comment, user, users, setPostIndicator, postInd
     return (
         <>
             {renderAlert()}
-            <article className="my-2 mx-auto rounded-xl border border-accent-2 bg-accent-1">
+            <article id={comment.comment_id} className="my-2 mx-auto rounded-xl border border-accent-2 bg-accent-1">
                 <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
                     <a href="#" className="block shrink-0">
                         <img
