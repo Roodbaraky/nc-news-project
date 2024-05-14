@@ -9,7 +9,7 @@ export const ProfileCommentCard = ({ comment, user }) => {
 
   return (
 
-    <Link to={`../../articles/${comment.article_id}`}>
+    <Link to={`../../articles/${comment.article_id}` } href={`#${comment.comment_id}`}>
       <div className="article max-w-4xl mx-auto bg-bkg-1/40 rounded-lg shadow-md p-6 mb-6 mt-4">
         <h3 className="title text-xl mb-0">{comment.body}</h3>
         <div className="w-full flex justify-between gap-3 mx-auto">

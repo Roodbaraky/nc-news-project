@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 export const Error = ({ error }) => {
     const navigate = useNavigate()
     return (
-        <div className='error-container'>
+        <div className='h-full min-h-screen error-container flex flex-col place-items-center mt-40'>
             <div>
                 <h1>{error.status || 404}</h1>
             </div>

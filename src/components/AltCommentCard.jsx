@@ -1,10 +1,24 @@
-import { deleteArticleComment } from '../utils/APIs'
+import { deleteArticleComment, postCommentVote } from '../utils/APIs'
 import moment from 'moment'
+import { useErrorHandler } from '../utils/errorHandler'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-export const AltCommentCard = ({ comment, user, users, setPostIndicator, postIndicator, triggerError }) => {
+
+
+export const AltCommentCard = ({ comment, user, users, setPostIndicator, postIndicator }) => {
+    const { triggerError, renderAlert } = useErrorHandler()
+    const [upVoted, setUpVoted] = useState(false)
+    const [downVoted, setDownVoted] = useState(false)
+    let [votes, setVotes] = useState(0)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        setVotes(comment.votes)
+    }, [])
+
 
     const deleteComment = () => {
-
         deleteArticleComment(comment.comment_id)
             .then(() => {
                 setPostIndicator(++postIndicator)
@@ -15,12 +29,70 @@ export const AltCommentCard = ({ comment, user, users, setPostIndicator, postInd
             )
     }
 
+    const voteOnComment = (e) => {
+        const voteBody = { inc_votes: 0 }
+        if (comment.author !== user.username) {
+            if (e.target.id === 'upvote') {
+                if (!upVoted && !downVoted) {
+                    voteBody.inc_votes = 1
+                    setVotes(++votes)
+                    setUpVoted(true)
+                }
+                if (upVoted) {
+                    setUpVoted(false)
+                    setVotes(--votes)
+                    voteBody.inc_votes = -1
+                }
+                if (downVoted) {
+                    setUpVoted(true)
+                    setDownVoted(false)
+                    setVotes(votes + 2)
+                    voteBody.inc_votes = 2
+                }
+            }
+            if (e.target.id === 'downvote') {
+                if (!downVoted && !upVoted) {
+                    voteBody.inc_votes = -1
+                    setVotes(--votes)
+                    setDownVoted(true)
+                }
+                if (downVoted) {
+                    voteBody.inc_votes = 1
+                    setVotes(++votes)
+                    setDownVoted(false)
+                }
+                if (upVoted) {
+                    voteBody.inc_votes = -2
+                    setVotes(votes - 2)
+                    setDownVoted(true)
+                    setUpVoted(false)
+                }
+            }
+
+
+            if (voteBody.inc_votes !== 0) {
+                postCommentVote(comment.comment_id, voteBody)
+                    .then(() => { })
+                    .catch(() => {
+                        setDownVoted(false)
+                        setUpVoted(false)
+                        triggerError('Failed to cast vote')
+                    })
+            }
+        } else {
+            triggerError('You can\'t vote on your own comment!')
+        }
+
+    }
+
     return (
         <>
-            <article className="my-2 mx-auto rounded-xl border border-accent-2 bg-accent-1">
+            {renderAlert()}
+            <article id={comment.comment_id} className="my-2 mx-auto rounded-xl border border-accent-2 bg-accent-1">
                 <div className="flex items-start gap-4 p-4 sm:p-6 lg:p-8">
                     <a href="#" className="block shrink-0">
                         <img
+                            onClick={() => { navigate(`/users/${comment.author}`) }}
                             alt=""
                             src={users.filter((user) => user.username === comment.author)[0].avatar_url}
                             className="size-14 rounded-lg object-cover"
@@ -34,17 +106,19 @@ export const AltCommentCard = ({ comment, user, users, setPostIndicator, postInd
 
                         <div className="mt-2 sm:flex sm:items-center sm:gap-2">
                             <div className="flex items-center gap-1 text-accent-3">
+                                <button id='upvote' onClick={voteOnComment} className="bg-accent-1 text-content hover:bg-accent-2  py-2 px-4 rounded-full mx-2 " >UP</button>
+                                <p className="text-m">{votes}</p>
+                                <button id='downvote' onClick={voteOnComment} className="bg-accent-1 text-content hover:bg-accent-2  py-2 px-4 rounded-full w-fit mx-2" >DOWN</button>
 
-                                <p className="text-m">{comment.votes}</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div>
                     <p className="text-xs text-content flex gap-2 ms-5 flex-wrap">
-                            Posted by
-                            <a href="#" className="font-medium underline hover:text-gray-700"> {comment.author}</a>{moment(comment.created_at).format('DD/MM/YY, h:mm:ss a')}
-                        </p>
+                        Posted by
+                        <a onClick={() => { navigate(`/users/${comment.author}`) }} href='#' className="font-medium underline hover:text-gray-700"> {comment.author}</a>{moment(comment.created_at).format('DD/MM/YY, h:mm:ss a')}
+                    </p>
                     {user.username === comment.author && <div id='delete-button' className="flex justify-end">
                         <strong
                             className="-mb-[2px] -me-[2px] inline-flex items-center gap-1 rounded-ee-xl rounded-ss-xl bg-bkg px-3 py-1.5 text-content"
@@ -64,7 +138,7 @@ export const AltCommentCard = ({ comment, user, users, setPostIndicator, postInd
                                     d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
                                 />
                             </svg>
-    
+
                             <span className="text-[10px] font-medium sm:text-xs">Delete</span>
                         </strong>
                     </div>}

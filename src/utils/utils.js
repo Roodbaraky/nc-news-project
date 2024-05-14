@@ -3,7 +3,7 @@ export const getImageUrl = (path) => {
 }
 
 export const pageCalculator = (totalCount, limit) => {
-    const lastPage = Math.ceil(totalCount / limit)
+    const lastPage = Math.ceil(totalCount / limit) -1
 
     const arr = []
     for (let i = 2; i < lastPage; i++) {

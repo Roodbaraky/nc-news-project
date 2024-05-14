@@ -4,11 +4,16 @@ import "slick-carousel/slick/slick.css"
 import { getArticles } from '../utils/APIs'
 import { Carousel } from './Carousel'
 import { LoadingSpinner } from './LoadingSpinner'
+import ReactMarkdown from 'https://esm.sh/react-markdown@7'
+import readMe from '../../README.md';
+import remarkGfm from 'remark-gfm'
+
 
 
 export const Home = () => {
   const [articles, setArticles] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [README, setREADME] = useState('')
 
   useEffect(() => {
     getArticles(null, 'created_at', 'DESC', '10', '1')
@@ -16,6 +21,9 @@ export const Home = () => {
         setArticles(rows)
         setIsLoading(false)
       })
+    fetch(readMe)
+      .then((res) => res.text())
+      .then((text) => setREADME(text))
   }, [])
 
   return (
@@ -33,10 +41,11 @@ export const Home = () => {
       </section>
 
       <section id='how-to-container' className='py-12 px-4 container mx-auto'>
-          <h2 id='how-to-title' className='text-3xl font-bold mb-8'>How to use NC News:</h2>
-          <p id='readme-placeholder' className='text-lg'>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. In dolor fuga cupiditate est maiores quam repellat cumque velit et magnam laudantium, natus autem aliquid. Nam enim rem ipsa ipsam iste.
-          </p>
+        <h2 id='how-to-title' className='text-3xl font-bold mb-8'>How to use NC News:</h2>
+        <article className='text-sm h-1/2 overflow-scroll bg-accent-1 rounded-lg'>
+          <ReactMarkdown  children={README}  className='h-48 overflow-scroll  overwhitespace-nowrap' />
+        </article>
+
       </section>
     </section>
   )
