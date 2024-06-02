@@ -2,30 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --color-bkg: 255 179 193;
-    --color-content: 52 37 40;
-    --color-accent1: 255 143 163;
-    --color-accent2: 255 117 143;
-    --color-accent3: 255 77 109;
-  }
 
-  @media (prefers-color-scheme:dark) {
-    :root {
-      --color-bkg: 89 13 34;
-      --color-content: 255 240 243;
-      --color-accent1: 128 15 47;
-      --color-accent2: 164 19 60;
-      --color-accent3: 201 24 74;
-    }
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
   }
 }
-
-:root{
-  height: 100vh;
-  background: var(--color-bkg);
+*{
+  scroll-behavior: smooth;
+  box-sizing:border-box;
 }
+
+
 html,
 body {
   height: 100vh;
@@ -47,4 +35,3 @@ a {
 * {
   box-sizing: border-box;
 }
-
