@@ -1,25 +1,42 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { User } from "../types/User";
 
-export const getUser = (username: string) => {
-    return axios
-        .get(`https://nc-news-solo.onrender.com/api/users/${username}`)
-        .then(({ data: { user } }) => {
-            return user;
-        });
-};
-
-export const getUsers = () => {
-    return axios
-        .get(`https://nc-news-solo.onrender.com/api/users`)
-        .then(({ data: { users } }) => {
-            return users
-        })
+interface ErrorResponse {
+    status: number;
+    message: string;
 }
 
-export const getArticles = (searchTerm: string | undefined, sort_by: string, order: string, limit: string, p: string, author: string) => {
-    return axios
-        .get(`https://nc-news-solo.onrender.com/api/articles`, {
+export const getUser = async (username: string): Promise<User> => {
+    try {
+        const response: AxiosResponse<{ user: User }> = await axios.get(`https://nc-news-solo.onrender.com/api/users/${username}`);
+        return response.data.user;
+    } catch (error) {
+        const axiosError = error as ErrorResponse;
+        if (axiosError && axiosError.status && axiosError.message) {
+            throw { status: axiosError.status, msg: axiosError.message };
+        } else {
+            throw { status: 500, msg: "Unknown error occurred" };
+        }
+    }
+};
+
+export const getUsers = async (): Promise<User[]> => {
+    try {
+        const response: AxiosResponse<{ users: User[] }> = await axios.get(`https://nc-news-solo.onrender.com/api/users`);
+        return response.data.users;
+    } catch (error) {
+        const axiosError = error as ErrorResponse;
+        if (axiosError && axiosError.status && axiosError.message) {
+            throw { status: axiosError.status, msg: axiosError.message };
+        } else {
+            throw { status: 500, msg: "Unknown error occurred" };
+        }
+    }
+};
+
+export const getArticles = async (searchTerm: string | undefined, sort_by: string, order: string, limit: string, p: string, author: string) => {
+    try {
+        const response = await axios.get(`https://nc-news-solo.onrender.com/api/articles`, {
             params: {
                 topic: searchTerm,
                 sort_by: sort_by,
@@ -28,89 +45,123 @@ export const getArticles = (searchTerm: string | undefined, sort_by: string, ord
                 p: p,
                 author: author
             }
-        })
-        .then(({ data: { articles } }) => {
-            return articles;
-        })
-        .catch((err) => {
-
-            return Promise.reject({ status: err.response.status, msg: err.message })
-        })
-}
-
-export const getArticleById = (article_id: number) => {
-    return axios
-        .get(`https://nc-news-solo.onrender.com/api/articles/${article_id}`)
-        .then(({ data }) => {
-            return data;
-        })
-        .catch((err) => {
-            return Promise.reject({ status: err.response.status, msg: err.message })
-        })
-
+        });
+        return response.data.articles;
+    } catch (error) {
+        const axiosError = error as ErrorResponse;
+        if (axiosError && axiosError.status && axiosError.message) {
+            throw { status: axiosError.status, msg: axiosError.message };
+        } else {
+            throw { status: 500, msg: "Unknown error occurred" };
+        }
+    }
 };
 
-export const getCommentsById = (article_id: number) => {
-    return axios
-        .get(`https://nc-news-solo.onrender.com/api/articles/${article_id}/comments`)
-        .then(({ data: { comments } }) => {
-            return comments
-        })
-        .catch((err) => {
-            return Promise.reject({ status: err.response.status, msg: err.message })
-        })
-}
+export const getArticleById = async (article_id: number) => {
+    try {
+        const response = await axios.get(`https://nc-news-solo.onrender.com/api/articles/${article_id}`);
+        return response.data;
+    } catch (error) {
+        const axiosError = error as ErrorResponse;
+        if (axiosError && axiosError.status && axiosError.message) {
+            throw { status: axiosError.status, msg: axiosError.message };
+        } else {
+            throw { status: 500, msg: "Unknown error occurred" };
+        }
+    }
+};
 
-export const patchArticleVotes = (article_id: number | undefined, reqBody: { inc_votes: number; }) => {
-    return axios
-        .patch(`https://nc-news-solo.onrender.com/api/articles/${article_id}`, reqBody)
-        .then(() => {
+export const getCommentsById = async (article_id: number) => {
+    try {
+        const response = await axios.get(`https://nc-news-solo.onrender.com/api/articles/${article_id}/comments`);
+        return response.data.comments;
+    } catch (error) {
+        const axiosError = error as ErrorResponse;
+        if (axiosError && axiosError.status && axiosError.message) {
+            throw { status: axiosError.status, msg: axiosError.message };
+        } else {
+            throw { status: 500, msg: "Unknown error occurred" };
+        }
+    }
+};
 
-        })
-        .catch((err) => {
-            return Promise.reject({ status: err.response.status, msg: err.message })
-        })
-}
+export const patchArticleVotes = async (article_id: number | undefined, reqBody: { inc_votes: number; }) => {
+    try {
+        await axios.patch(`https://nc-news-solo.onrender.com/api/articles/${article_id}`, reqBody);
+    } catch (error) {
+        const axiosError = error as ErrorResponse;
+        if (axiosError && axiosError.status && axiosError.message) {
+            throw { status: axiosError.status, msg: axiosError.message };
+        } else {
+            throw { status: 500, msg: "Unknown error occurred" };
+        }
+    }
+};
 
-export const postArticleComment = (article_id: number, reqBody: { username: string; body: string; }) => {
-    return axios
-        .post(`https://nc-news-solo.onrender.com/api/articles/${article_id}/comments`, reqBody)
-        .then(({ data }) => {
-            return data
-        })
-        .catch((err) => {
-            return Promise.reject({ status: err.response.status, msg: err.message })
-        })
+export const postArticleComment = async (article_id: number, reqBody: { username: string; body: string; }) => {
+    try {
+        const response = await axios.post(`https://nc-news-solo.onrender.com/api/articles/${article_id}/comments`, reqBody);
+        return response.data;
+    } catch (error) {
+        const axiosError = error as ErrorResponse;
+        if (axiosError && axiosError.status && axiosError.message) {
+            throw { status: axiosError.status, msg: axiosError.message };
+        } else {
+            throw { status: 500, msg: "Unknown error occurred" };
+        }
+    }
+};
 
-}
+export const deleteArticleComment = async (comment_id: number) => {
+    try {
+        await axios.delete(`https://nc-news-solo.onrender.com/api/comments/${comment_id}`);
+    } catch (error) {
+        const axiosError = error as ErrorResponse;
+        if (axiosError && axiosError.status && axiosError.message) {
+            throw { status: axiosError.status, msg: axiosError.message };
+        } else {
+            throw { status: 500, msg: "Unknown error occurred" };
+        }
+    }
+};
 
-export const deleteArticleComment = (comment_id: number) => {
-    return axios
-        .delete(`https://nc-news-solo.onrender.com/api/comments/${comment_id}`)
-        .then(() => { })
-        .catch((err) => {
-            return Promise.reject({ status: err.response.status, msg: err.message })
-        })
-}
+export const getTopics = async () => {
+    try {
+        const response = await axios.get(`https://nc-news-solo.onrender.com/api/topics`);
+        return response.data.topics;
+    } catch (error) {
+        const axiosError = error as ErrorResponse;
+        if (axiosError && axiosError.status && axiosError.message) {
+            throw { status: axiosError.status, msg: axiosError.message };
+        } else {
+            throw { status: 500, msg: "Unknown error occurred" };
+        }
+    }
+};
 
-export const getTopics = () => {
-    return axios
-        .get(`https://nc-news-solo.onrender.com/api/topics`)
-        .then(({ data: { topics } }) => {
-            return topics;
-        });
-}
+export const getCommentsByUser = async (user: User) => {
+    try {
+        const response = await axios.get(`https://nc-news-solo.onrender.com/api/comments/by/${user}`);
+        return response.data.comments;
+    } catch (error) {
+        const axiosError = error as ErrorResponse;
+        if (axiosError && axiosError.status && axiosError.message) {
+            throw { status: axiosError.status, msg: axiosError.message };
+        } else {
+            throw { status: 500, msg: "Unknown error occurred" };
+        }
+    }
+};
 
-export const getCommentsByUser = (user: User) => {
-    return axios
-        .get(`https://nc-news-solo.onrender.com/api/comments/by/${user}`)
-        .then(({ data: { comments } }) => {
-            return comments;
-        });
-}
-
-export const postCommentVote = (comment_id: number, reqBody: { inc_votes: number; }) => {
-    return axios
-        .patch(`https://nc-news-solo.onrender.com/api/comments/${comment_id}`,
-            reqBody)
-}
+export const postCommentVote = async (comment_id: number, reqBody: { inc_votes: number; }) => {
+    try {
+        await axios.patch(`https://nc-news-solo.onrender.com/api/comments/${comment_id}`, reqBody);
+    } catch (error) {
+        const axiosError = error as ErrorResponse;
+        if (axiosError && axiosError.status && axiosError.message) {
+            throw { status: axiosError.status, msg: axiosError.message };
+        } else {
+            throw { status: 500, msg: "Unknown error occurred" };
+        }
+    }
+};
