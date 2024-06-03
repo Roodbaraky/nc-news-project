@@ -9,23 +9,28 @@ import { ErrorContext } from "../context/context"
 
 
 export const Home = () => {
-
     const [articles, setArticles] = useState<IArticle[]>([])
+
     const [isLoading, setIsLoading] = useState(true)
     const { setError } = useContext(ErrorContext) ?? { error: null, setError: () => { } }
+
     const { topic } = useParams()
     const [searchParams, setSearchParams] = useSearchParams()
    
+
+
+    
     useEffect(() => {
         const searchParamObject: SearchParams = {}
         for (const [key, value] of searchParams.entries()) {
             searchParamObject[key as keyof SearchParams] = value
         }
         const { sort_by, order_by, limit, page, author } = searchParamObject
+console.log('check for infinite loop')
         async function fetchArticles() {
-            // console.log(searchParamObject)
        
             try {
+                setIsLoading(true)
                 const fetchedArticles: IArticle[] = await getArticles(topic, sort_by, order_by, limit, page, author)
                 setArticles(fetchedArticles)
 
@@ -46,7 +51,7 @@ export const Home = () => {
             {isLoading && <div className='mt-20 mx-auto text-center'><strong>not</strong> the front page of the internet</div>}
             {isLoading
                 ? <Loading />
-                : <Articles articles={articles} setArticles={setArticles} setSearchParams={setSearchParams} />}
+                : <Articles articles={articles} setArticles={setArticles} setSearchParams={setSearchParams} searchParams={searchParams}/>}
 
         </section>
     )

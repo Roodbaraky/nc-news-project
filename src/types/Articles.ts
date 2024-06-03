@@ -19,6 +19,7 @@ export interface ArticlesProps {
     articles: IArticle[];
     setArticles: Dispatch<SetStateAction<IArticle[]>>;
     setSearchParams: SetURLSearchParams
+    searchParams: URLSearchParams,
 }
 
 export interface SearchParams {
