@@ -3,7 +3,7 @@ import { BiSolidComment, BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi
 import { FaShare } from "react-icons/fa"
 import { useNavigate } from "react-router-dom"
 import { patchArticleVotes } from "../services/api"
-import { UserContext } from "../context/context"
+import { ErrorContext, UserContext } from "../context/context"
 import { ArticleTileProps } from "../types/Articles"
 
 
@@ -11,9 +11,10 @@ import { ArticleTileProps } from "../types/Articles"
 //comments preview modal(?)
 
 
-export const ArticleTile = ({ article }:ArticleTileProps):JSX.Element => {
+export const ArticleTile = ({ article }: ArticleTileProps): JSX.Element => {
     const navigate = useNavigate()
     const { user } = useContext(UserContext) ?? { user: null }
+    const { setError } = useContext(ErrorContext) ?? { setError: () => { } }
     const [upVoted, setUpVoted] = useState(false)
     const [downVoted, setDownVoted] = useState(false)
     const [votes, setVotes] = useState(article.votes)
@@ -33,13 +34,16 @@ export const ArticleTile = ({ article }:ArticleTileProps):JSX.Element => {
             } catch (err) {
                 setDownVoted(false)
                 setUpVoted(false)
-                console.log('Failed to cast vote')
+                setError({ message: 'Failed to cast vote' })
             }
         }
     }
-    const voteOnArticle = (e:MouseEvent) => {
+    const voteOnArticle = (e: MouseEvent) => {
         const voteBody = { inc_votes: 0 }
-        if (article.author !== user?.username) {
+        if (!user) {
+            setError({ message: 'You must be logged in to vote' })
+        }
+        else if (article.author !== user?.username) {
             const target = e.target as HTMLButtonElement
             if (target.id === 'upvote') {
                 if (!upVoted && !downVoted) {
@@ -59,7 +63,7 @@ export const ArticleTile = ({ article }:ArticleTileProps):JSX.Element => {
 
                 }
             }
-            
+
             if (target.id === 'downvote') {
                 if (!downVoted && !upVoted) {
 
@@ -82,12 +86,21 @@ export const ArticleTile = ({ article }:ArticleTileProps):JSX.Element => {
 
 
         } else {
-            console.log('You can\'t vote on your own article!')
+            setError({ message: 'You can\'t vote on your own article!' })
         }
 
     }
 
-    const handleBlur = (e:FocusEvent) => {
+    const handleCommentsClick = () => {
+        if (!user) {
+            setError({ message: 'You must be logged in to comment' })
+        }
+        else {
+            navigate(`/article/${article.article_id}`)
+        }
+    }
+
+    const handleBlur = (e: FocusEvent) => {
         const currentTarget = e.currentTarget;
         setTimeout(() => {
             if (!currentTarget.contains(document.activeElement)) {
@@ -118,8 +131,8 @@ export const ArticleTile = ({ article }:ArticleTileProps):JSX.Element => {
                         <div className="btn">{votes}</div>
                         <button id='downvote' onClick={voteOnArticle} className="btn"><BiSolidDownArrow className="pointer-events-none" /></button>
                     </div>
-                    <button onClick={() => { navigate(`/article/${article.article_id}`) }} className="btn">{article.comment_count} <BiSolidComment className="pointer-events-none" /></button>
-                    <button className="btn"><FaShare className="pointer-events-none"/></button>
+                    <button onClick={handleCommentsClick} className="btn">{article.comment_count} <BiSolidComment className="pointer-events-none" /></button>
+                    <button className="btn"><FaShare className="pointer-events-none" /></button>
                 </div>
             </div>
         </section>
