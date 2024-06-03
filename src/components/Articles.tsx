@@ -44,7 +44,7 @@ export const Articles = ({ articles, setSearchParams }:ArticlesProps):JSX.Elemen
     },[setSearchParams])
     return (
         <section id='articles-container' className='flex flex-col w-full items-center mt-20'>
-            <section id='filters selector' className='flex place-content-evenly size-full'>
+            <section id='filters selector' className='flex place-content-center gap-28 size-full'>
                 <label htmlFor="">{'Sort by: '}
                     <select name="" id="sort-by" onChange={handleFilterChange}>
                         <option value="created_at">Date created</option>
@@ -57,8 +57,6 @@ export const Articles = ({ articles, setSearchParams }:ArticlesProps):JSX.Elemen
                     <div className="swap-on" onClick={handleFilterChange} id='ASC'><BiUpArrow className='pointer-events-none' /></div>
                     <div className="swap-off" onClick={handleFilterChange} id='DESC' ><BiDownArrow className='pointer-events-none' /></div>
                 </label>
-
-
             </section>
             {/* Conditional for loading component */}
             {/* Filters - Push queries to URL */}
