@@ -107,7 +107,7 @@ export const Navbar = () => {
                 <div className="navbar-center">
                     <a className="btn btn-ghost text-4xl hidden sm:flex">NC News</a>
                 </div>
-                <div className="navbar-end">
+                <div className="navbar-end mx-4">
                     <label className="swap swap-rotate">
                         <input type="checkbox" onClick={() => { setTheme(theme === 'business' ? 'emerald' : 'business') }} />
                         <svg className="swap-on fill-current w-10 h-10 scale-[70%]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
