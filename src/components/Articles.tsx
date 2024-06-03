@@ -8,10 +8,6 @@ import { IArticle, ArticlesProps } from '../types/Articles'
 
 export const Articles = ({ articles, searchParams, setSearchParams }: ArticlesProps): JSX.Element => {
     //ideally: endless scroll for pagination
-    //leave author null, just for use on user profile page
-    //leave limit outside of user control too ...
-    //this just leaves order by and sort_by in user control
-
 
     const handleFilterChange = (e: MouseEvent | ChangeEvent) => {
         let orderBy
@@ -55,10 +51,6 @@ export const Articles = ({ articles, searchParams, setSearchParams }: ArticlesPr
                     <div className="swap-off" onClick={handleFilterChange} id='DESC' ><BiDownArrow className='pointer-events-none' /></div>
                 </label>
             </section>
-            {/* Conditional for loading component */}
-            {/* Filters - Push queries to URL */}
-            {/* articles.map --> ArticleCard */}
-            {/* Unlimited scroll */}
             {articles?.map((article: IArticle) => <ArticleTile key={article.article_id} article={article} />)}
         </section>
     )
