@@ -123,11 +123,11 @@ export const Article = () => {
 
 
    if(article) return (
-        <section id="article-container" onBlur={handleBlur}>
+        <section id="article-container" onBlur={handleBlur} className="self-center">
             <article className="border-t  bg-base-300 m-4 mt-20 p-2   w-11/12 max-w-4xl object-contain ">
                 <h3 className='text-lg inline mr-2'>{article.topic}</h3><p className='inline'>{article.created_at} ago</p>
                 <h2 className='font-semibold m-2 '>{article.title}</h2>
-                <img src={article.article_img_url} className="" />
+                <img src={article.article_img_url} className="self-center mx-auto" />
             </article>
             <section id="comment-vote" className="w=11/12 max-w-4xl mx-4">
                 <div className="flex flex-wrap size-full">
