@@ -44,8 +44,8 @@ export const Articles = ({ articles, setSearchParams }:ArticlesProps):JSX.Elemen
     },[setSearchParams])
     return (
         <section id='articles-container' className='flex flex-col w-full items-center mt-20'>
-            <section id='filters selector' className='flex place-content-center gap-28 size-full'>
-                <label htmlFor="">{'Sort by: '}
+            <section id='filters selector' className='flex place-content-center gap-32 size-full'>
+                <label htmlFor="" className=''>{}
                     <select name="" id="sort-by" onChange={handleFilterChange}>
                         <option value="created_at">Date created</option>
                         <option value="comment_count">Comments</option>
