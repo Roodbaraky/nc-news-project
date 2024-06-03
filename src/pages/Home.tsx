@@ -23,7 +23,6 @@ export const Home = () => {
         }
         const { sort_by, order_by, limit, page, author } = searchParamObject
         async function fetchArticles() {
-            // console.log(searchParamObject)
        
             try {
                 const fetchedArticles: IArticle[] = await getArticles(topic, sort_by, order_by, limit, page, author)
@@ -46,7 +45,7 @@ export const Home = () => {
             {isLoading && <div className='mt-20 mx-auto text-center'><strong>not</strong> the front page of the internet</div>}
             {isLoading
                 ? <Loading />
-                : <Articles articles={articles} setArticles={setArticles} setSearchParams={setSearchParams} />}
+                : <Articles articles={articles} setArticles={setArticles} setSearchParams={setSearchParams} searchParams={searchParams}/>}
 
         </section>
     )
