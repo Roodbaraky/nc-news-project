@@ -123,7 +123,7 @@ export const Article = () => {
     };
 
 
-   if(article) return (
+   if(article && article_id) return (
         <section id="article-container" onBlur={handleBlur} className="self-center">
             <article className="border-t  bg-base-300 m-4 mt-20 p-2   w-11/12 max-w-4xl object-contain ">
                 <h3 className='text-lg inline mr-2'>{article.topic}</h3><p className='inline'>{convertToTimeAgo(article.created_at)}</p>
@@ -139,7 +139,7 @@ export const Article = () => {
                     </div>
                 </div>
             </section>
-            <CommentsSection article_id={+!article_id} comments={comments} postIndicator={postIndicator} setPostIndicator={setPostIndicator} />
+            <CommentsSection article_id={+article_id} comments={comments} postIndicator={postIndicator} setPostIndicator={setPostIndicator} />
         </section>
     )
 }
