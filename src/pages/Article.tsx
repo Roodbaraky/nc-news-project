@@ -165,7 +165,7 @@ export const Article = () => {
     return (
       <section
         id="article-container"
-        onBlur={handleBlur}
+      
         className="self-center"
       >
         <article className="border-t  bg-base-300 m-4 mt-20 p-2   w-11/12 max-w-4xl object-contain ">
