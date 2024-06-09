@@ -5,7 +5,7 @@ import { BiSolidDownArrow, BiSolidUpArrow } from 'react-icons/bi'
 import { CommentCardProps } from '../types/Comments'
 import { convertToTimeAgo } from '../utils/timeAgo'
 
-export const CommentCard = ({ comment, setPostIndicator }: CommentCardProps): JSX.Element => {
+export const CommentCard = ({ comment }: CommentCardProps): JSX.Element => {
     const { user } = useContext(UserContext) ?? { user: null }
     const { setError } = useContext(ErrorContext) ?? { setError: () => { } }
     const [authorImgUrl, setAuthorImgUrl] = useState('')
@@ -35,7 +35,6 @@ export const CommentCard = ({ comment, setPostIndicator }: CommentCardProps): JS
             if (!deleting) {
                 try {
                     await deleteArticleComment(comment.comment_id)
-                    setPostIndicator((postIndicator: boolean) => !postIndicator)
                     setDeleting(false)
                 } catch (err) {
                     setError({ message: 'The comment no longer exists' })

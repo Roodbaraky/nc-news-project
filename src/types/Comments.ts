@@ -1,5 +1,5 @@
 import { UseMutationResult } from "@tanstack/react-query";
-import { Dispatch, SetStateAction } from "react";
+
 
 export interface Comment {
     votes: number,
@@ -12,15 +12,12 @@ export interface Comment {
 
 export interface CommentCardProps {
     comment: Comment,
-   
 
 }
 
 export interface CommentModalProps {
     article_id: number,
-    setPostIndicator: Dispatch<SetStateAction<boolean>>,
-    commentsMutation: UseMutationResult<any, Error, void, {
-        previousComments: any;
-    }>
-}
+    commentsMutation: UseMutationResult<Comment, Error, { username: string; body: string; }, { previousComments?: Comment[] | undefined; }>
 
+
+}

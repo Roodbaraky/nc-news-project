@@ -1,29 +1,36 @@
+import { CommentModal } from "./CommentModal";
+import { CommentCard } from "./CommentCard";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCommentsById, postArticleComment } from "../services/api";
 import { useParams } from "react-router-dom";
-import { CommentModal } from "./CommentModal";
-import { CommentCard } from "./CommentCard";
-import { useState } from "react";
+import { Comment } from "../types/Comments"; // Assuming you have a Comment type defined in types/Comments
 
-export const CommentsSection = (): JSX.Element | null => {
+export const CommentsSection = (): JSX.Element => {
   const { article_id } = useParams<{ article_id: string }>();
   const queryClient = useQueryClient();
-  const [error, setError] = useState<{ message: string } | null>(null);
 
-  const commentsQuery = useQuery({
+  const commentsQuery = useQuery<Comment[], Error>({
     queryKey: ["comments", article_id],
     queryFn: () => getCommentsById(Number(article_id)),
   });
 
-  const commentsMutation = useMutation({
+  const commentsMutation = useMutation<
+    Comment,
+    Error,
+    { username: string; body: string },
+    { previousComments?: Comment[] }
+  >({
     mutationFn: async (commentBody: { username: string; body: string }) => {
       const response = await postArticleComment(Number(article_id), commentBody);
       return response;
     },
     onMutate: async (commentBody: { username: string; body: string }) => {
-      await queryClient.cancelQueries(["comments", article_id]);
+      await queryClient.cancelQueries({ queryKey: ["comments", article_id] });
 
-      const previousComments = queryClient.getQueryData<Comment[]>(["comments", article_id]);
+      const previousComments = queryClient.getQueryData<Comment[]>([
+        "comments",
+        article_id,
+      ]);
 
       const newComment: Comment = {
         author: commentBody.username,
@@ -35,7 +42,7 @@ export const CommentsSection = (): JSX.Element | null => {
       };
 
       queryClient.setQueryData<Comment[]>(["comments", article_id], (oldComments = []) => {
-        return [...oldComments, newComment];
+        return [newComment, ...oldComments];
       });
 
       return { previousComments };
@@ -44,10 +51,9 @@ export const CommentsSection = (): JSX.Element | null => {
       if (context?.previousComments) {
         queryClient.setQueryData<Comment[]>(["comments", article_id], context.previousComments);
       }
-      setError({ message: "Failed to post comment" });
     },
     onSettled: () => {
-      queryClient.invalidateQueries(["comments", article_id]);
+      queryClient.invalidateQueries({ queryKey: ["comments", article_id] });
     },
   });
 
@@ -61,7 +67,7 @@ export const CommentsSection = (): JSX.Element | null => {
 
   return (
     <section id="comments-section" className="mt-12 flex flex-col items-center">
-      <CommentModal article_id={article_id} commentsMutation={commentsMutation} />
+      <CommentModal article_id={Number(article_id)} commentsMutation={commentsMutation} />
       {commentsQuery.data?.map((comment) => (
         <CommentCard key={comment.comment_id} comment={comment} />
       ))}
