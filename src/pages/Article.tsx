@@ -18,6 +18,7 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { FaEllipsis } from "react-icons/fa6";
+import { Comment } from "../types/Comments";
 
 export const Article = () => {
   const { user } = useContext(UserContext) ?? { user: null };
@@ -36,14 +37,11 @@ export const Article = () => {
     error,
   } = useQuery({
     queryKey: ["article"],
-    queryFn: () => {
-      return getArticleById(Number(article_id));
-    },
+    queryFn: () => getArticleById(Number(article_id)),
   });
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (voteBody: { inc_votes: number }) => {
-      console.log(article_id, voteBody);
       const response = await patchArticleVotes(Number(article_id), voteBody);
       return response;
     },
@@ -66,6 +64,13 @@ export const Article = () => {
       queryClient.invalidateQueries(["article"]);
     },
   });
+
+  const commentsQuery = useQuery({
+    queryKey: ["comments"],
+    queryFn: () => getCommentsById(Number(article_id)),
+  });
+
+
 
   if (isLoading) {
     return <span>Loading...</span>;
@@ -93,14 +98,14 @@ export const Article = () => {
       setError({ message: "You must be logged in to vote" });
       return;
     }
-  
+
     if (article!.author === user.username) {
       setError({ message: "You cannot vote on your own article" });
       return;
     }
-  
+
     const target = e.target as HTMLButtonElement;
-  
+
     if (target.id === "upvote") {
       if (!upVoted && !downVoted) {
         setUpVoted(true);
@@ -127,7 +132,6 @@ export const Article = () => {
       }
     }
   };
-  
 
   const handleBlur = (e: FocusEvent) => {
     const currentTarget = e.currentTarget;
@@ -151,22 +155,23 @@ export const Article = () => {
           <div className="flex flex-wrap size-full">
             <div className="flex">
               <button id="upvote" onClick={voteOnArticle} className="btn">
-                
-                  <BiSolidUpArrow className="pointer-events-none" />
-                
+                <BiSolidUpArrow className="pointer-events-none" />
               </button>
-              <div className="text-center content-center items-center">{article.votes}{isPending&&<FaEllipsis className="self-center text-center"/>}</div>
+              <div className="text-center content-center items-center">
+                {article.votes}
+                {isPending && (
+                  <FaEllipsis className="self-center text-center" />
+                )}
+              </div>
               <button id="downvote" onClick={voteOnArticle} className="btn">
-                
-                  <BiSolidDownArrow className="pointer-events-none" />
-                
+                <BiSolidDownArrow className="pointer-events-none" />
               </button>
             </div>
           </div>
         </section>
         <CommentsSection
           article_id={+article_id}
-          comments={comments}
+          comments={commentsQuery.data}
           postIndicator={postIndicator}
           setPostIndicator={setPostIndicator}
         />
