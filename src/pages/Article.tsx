@@ -1,33 +1,23 @@
-import { FocusEvent, MouseEvent, useContext, useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { MouseEvent, useContext, useState } from "react";
+import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
+import { FaEllipsis } from "react-icons/fa6";
+import { useParams } from "react-router-dom";
+import { CommentsSection } from "../components/CommentsSection";
+import { ErrorContext, UserContext } from "../context/context";
 import {
   getArticleById,
-  getCommentsById,
-  patchArticleVotes,
+  patchArticleVotes
 } from "../services/api";
-import { useParams } from "react-router-dom";
-import { ErrorContext, UserContext } from "../context/context";
-import { CommentsSection } from "../components/CommentsSection";
-import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 import { IArticle } from "../types/Articles";
 import { convertToTimeAgo } from "../utils/timeAgo";
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
-import { FaEllipsis } from "react-icons/fa6";
-import { Comment } from "../types/Comments";
 
 export const Article = () => {
   const { user } = useContext(UserContext) ?? { user: null };
   const { setError } = useContext(ErrorContext) ?? { setError: () => {} };
   const { article_id } = useParams();
-  const [comments, setComments] = useState([]);
   const [upVoted, setUpVoted] = useState(false);
   const [downVoted, setDownVoted] = useState(false);
-  const [postIndicator, setPostIndicator] = useState(false);
   const queryClient = useQueryClient();
 
   const {
@@ -54,20 +44,20 @@ export const Article = () => {
           votes: oldArticle!.votes + voteBody.inc_votes,
         };
       });
-      return { previousArticle };
+      return { previousArticle: previousArticle! };
     },
-    onError: (_, __, context: { previousArticle: IArticle }) => {
-      queryClient.setQueryData<IArticle>(["article"], context.previousArticle);
+    onError: (_, __, context: { previousArticle: IArticle } | undefined) => {
+      if (context) {
+        queryClient.setQueryData<IArticle>(
+          ["article"],
+          context.previousArticle
+        );
+      }
       setError({ message: "Failed to vote" });
     },
     onSettled: () => {
-      queryClient.invalidateQueries(["article"]);
+      queryClient.invalidateQueries({ queryKey: ["article"] });
     },
-  });
-
-  const commentsQuery = useQuery({
-    queryKey: ["comments"],
-    queryFn: () => getCommentsById(Number(article_id)),
   });
 
 
@@ -77,20 +67,6 @@ export const Article = () => {
   }
   if (isError) {
     return <span>{error.message}</span>;
-  }
-
-  async function sendVotes() {
-    if (votes !== article!.votes) {
-      const difference = votes - article!.votes;
-      const voteBody = { inc_votes: difference };
-      try {
-        mutate(voteBody);
-      } catch (err) {
-        setDownVoted(false);
-        setUpVoted(false);
-        setError({ message: "Failed to vote" });
-      }
-    }
   }
 
   const voteOnArticle = (e: MouseEvent) => {
@@ -133,15 +109,6 @@ export const Article = () => {
     }
   };
 
-  const handleBlur = (e: FocusEvent) => {
-    const currentTarget = e.currentTarget;
-    setTimeout(() => {
-      if (!currentTarget.contains(document.activeElement)) {
-        sendVotes();
-      }
-    }, 0);
-  };
-
   if (article && article_id)
     return (
       <section id="article-container" className="self-center">
@@ -169,12 +136,7 @@ export const Article = () => {
             </div>
           </div>
         </section>
-        <CommentsSection
-          article_id={+article_id}
-          comments={commentsQuery.data}
-          postIndicator={postIndicator}
-          setPostIndicator={setPostIndicator}
-        />
+        <CommentsSection />
       </section>
     );
 };
