@@ -17,21 +17,17 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import { FaEllipsis } from "react-icons/fa6";
 
 export const Article = () => {
   const { user } = useContext(UserContext) ?? { user: null };
   const { setError } = useContext(ErrorContext) ?? { setError: () => {} };
   const { article_id } = useParams();
-  //   const [article, setArticle] = useState<null | IArticle>(null);
   const [comments, setComments] = useState([]);
   const [upVoted, setUpVoted] = useState(false);
   const [downVoted, setDownVoted] = useState(false);
-  const [votes, setVotes] = useState(0);
   const [postIndicator, setPostIndicator] = useState(false);
-
   const queryClient = useQueryClient();
-
-  
 
   const {
     isLoading,
@@ -45,22 +41,20 @@ export const Article = () => {
     },
   });
 
-
-
   const { mutate, isPending } = useMutation({
     mutationFn: async (voteBody: { inc_votes: number }) => {
+      console.log(article_id, voteBody);
       const response = await patchArticleVotes(Number(article_id), voteBody);
-      return response 
+      return response;
     },
     onMutate: async (voteBody: { inc_votes: number }) => {
-      await queryClient.cancelQueries({queryKey:["article"]});
+      await queryClient.cancelQueries({ queryKey: ["article"] });
       const previousArticle = queryClient.getQueryData<IArticle>(["article"]);
       queryClient.setQueryData<IArticle>(["article"], (oldArticle) => {
         return {
           ...oldArticle!,
           votes: oldArticle!.votes + voteBody.inc_votes,
         };
-
       });
       return { previousArticle };
     },
@@ -68,9 +62,9 @@ export const Article = () => {
       queryClient.setQueryData<IArticle>(["article"], context.previousArticle);
       setError({ message: "Failed to vote" });
     },
-    onSettled: ()=>{
-        queryClient.invalidateQueries(["article"]);
-    }
+    onSettled: () => {
+      queryClient.invalidateQueries(["article"]);
+    },
   });
 
   if (isLoading) {
@@ -79,22 +73,6 @@ export const Article = () => {
   if (isError) {
     return <span>{error.message}</span>;
   }
-  //   useEffect(() => {
-  //     async function fetchArticle(article_id: number) {
-  //       try {
-  //         const fetchedArticle = await getArticleById(article_id);
-  //         setArticle(fetchedArticle);
-  //         setVotes(fetchedArticle.votes);
-  //         const fetchedComments = await getCommentsById(article_id);
-  //         setComments(fetchedComments);
-  //       } catch (err) {
-  //         setError(err as Error);
-  //       }
-  //     }
-  //     if (article_id) {
-  //       fetchArticle(+article_id);
-  //     }
-  //   }, [article_id, postIndicator, setError]);
 
   async function sendVotes() {
     if (votes !== article!.votes) {
@@ -111,46 +89,45 @@ export const Article = () => {
   }
 
   const voteOnArticle = (e: MouseEvent) => {
-    const voteBody = { inc_votes: 0 };
     if (!user) {
       setError({ message: "You must be logged in to vote" });
-    } else if (article!.author !== user.username) {
-      const target = e.target as HTMLButtonElement;
-      if (target.id === "upvote") {
-        if (!upVoted && !downVoted) {
-          voteBody.inc_votes = 1;
-          setVotes(votes + 1);
-          setUpVoted(true);
-        }
-        if (upVoted) {
-          setUpVoted(false);
-          setVotes(votes - 1);
-        }
-        if (downVoted) {
-          setUpVoted(true);
-          setDownVoted(false);
-          setVotes(votes + 2);
-        }
-      }
-      if (target.id === "downvote") {
-        if (!downVoted && !upVoted) {
-          setVotes(votes - 1);
-          setDownVoted(true);
-        }
-        if (downVoted) {
-          setVotes(votes + 1);
-          setDownVoted(false);
-        }
-        if (upVoted) {
-          setVotes(votes - 2);
-          setDownVoted(true);
-          setUpVoted(false);
-        }
-      }
-    } else {
+      return;
+    }
+  
+    if (article!.author === user.username) {
       setError({ message: "You cannot vote on your own article" });
+      return;
+    }
+  
+    const target = e.target as HTMLButtonElement;
+  
+    if (target.id === "upvote") {
+      if (!upVoted && !downVoted) {
+        setUpVoted(true);
+        mutate({ inc_votes: 1 });
+      } else if (upVoted) {
+        setUpVoted(false);
+        mutate({ inc_votes: -1 });
+      } else if (downVoted) {
+        setUpVoted(true);
+        setDownVoted(false);
+        mutate({ inc_votes: 2 });
+      }
+    } else if (target.id === "downvote") {
+      if (!downVoted && !upVoted) {
+        setDownVoted(true);
+        mutate({ inc_votes: -1 });
+      } else if (downVoted) {
+        setDownVoted(false);
+        mutate({ inc_votes: 1 });
+      } else if (upVoted) {
+        setDownVoted(true);
+        setUpVoted(false);
+        mutate({ inc_votes: -2 });
+      }
     }
   };
+  
 
   const handleBlur = (e: FocusEvent) => {
     const currentTarget = e.currentTarget;
@@ -163,11 +140,7 @@ export const Article = () => {
 
   if (article && article_id)
     return (
-      <section
-        id="article-container"
-      
-        className="self-center"
-      >
+      <section id="article-container" className="self-center">
         <article className="border-t  bg-base-300 m-4 mt-20 p-2   w-11/12 max-w-4xl object-contain ">
           <h3 className="text-lg inline mr-2">{article.topic}</h3>
           <p className="inline">{convertToTimeAgo(article.created_at)}</p>
@@ -178,11 +151,15 @@ export const Article = () => {
           <div className="flex flex-wrap size-full">
             <div className="flex">
               <button id="upvote" onClick={voteOnArticle} className="btn">
-                <BiSolidUpArrow className="pointer-events-none" />
+                
+                  <BiSolidUpArrow className="pointer-events-none" />
+                
               </button>
-              <div>{votes}</div>
+              <div className="text-center content-center items-center">{article.votes}{isPending&&<FaEllipsis className="self-center text-center"/>}</div>
               <button id="downvote" onClick={voteOnArticle} className="btn">
-                <BiSolidDownArrow className="pointer-events-none" />
+                
+                  <BiSolidDownArrow className="pointer-events-none" />
+                
               </button>
             </div>
           </div>
