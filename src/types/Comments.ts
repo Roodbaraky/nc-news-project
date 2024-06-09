@@ -1,3 +1,4 @@
+import { UseMutationResult } from "@tanstack/react-query";
 import { Dispatch, SetStateAction } from "react";
 
 export interface Comment {
@@ -11,19 +12,15 @@ export interface Comment {
 
 export interface CommentCardProps {
     comment: Comment,
-    setPostIndicator: Dispatch<SetStateAction<boolean>>,
+   
 
 }
 
 export interface CommentModalProps {
     article_id: number,
     setPostIndicator: Dispatch<SetStateAction<boolean>>,
+    commentsMutation: UseMutationResult<any, Error, void, {
+        previousComments: any;
+    }>
 }
 
-export interface CommentsSectionProps {
-article_id: number,
-comments: Comment[],
-postIndicator: boolean,
-setPostIndicator: Dispatch<SetStateAction<boolean>>,
-
-}
