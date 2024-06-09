@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { patchArticleVotes } from "../services/api"
 import { ErrorContext, UserContext } from "../context/context"
 import { ArticleTileProps } from "../types/Articles"
+import { convertToTimeAgo } from "../utils/timeAgo"
 
 
 //find a way to show article body preview
@@ -18,6 +19,7 @@ export const ArticleTile = ({ article }: ArticleTileProps): JSX.Element => {
     const [upVoted, setUpVoted] = useState(false)
     const [downVoted, setDownVoted] = useState(false)
     const [votes, setVotes] = useState(article.votes)
+    const timeAgo = convertToTimeAgo(article.created_at)
 
 
     useEffect(() => {
@@ -115,7 +117,7 @@ export const ArticleTile = ({ article }: ArticleTileProps): JSX.Element => {
             <div id="content-container" className="border-t bg-base-300 p-2 max-h-52 size-full max-w-4xl overflow-hidden"
             >
 
-                <h3 className='text-lg inline mr-2 '>{article.topic}</h3><p className='inline'>{article.created_at} ago</p>
+                <h3 className='text-lg inline mr-2 '>{article.topic}</h3><p className='inline'>{timeAgo}</p>
 
                 <div onClick={() => { navigate(`/article/${article.article_id}`) }}>
                     <h2 className='font-semibold m-2 ml-0 mt-0 text-nowrap whitespace-nowrap overflow-hidden text-ellipsis'>{article.title}</h2>

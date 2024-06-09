@@ -3,6 +3,7 @@ import { deleteArticleComment, getUser, postCommentVote } from '../services/api'
 import { ErrorContext, UserContext } from '../context/context'
 import { BiSolidDownArrow, BiSolidUpArrow } from 'react-icons/bi'
 import { CommentCardProps } from '../types/Comments'
+import { convertToTimeAgo } from '../utils/timeAgo'
 
 export const CommentCard = ({ comment, setPostIndicator }: CommentCardProps): JSX.Element => {
     const { user } = useContext(UserContext) ?? { user: null }
@@ -12,6 +13,7 @@ export const CommentCard = ({ comment, setPostIndicator }: CommentCardProps): JS
     const [upVoted, setUpVoted] = useState(false)
     const [downVoted, setDownVoted] = useState(false)
     const [votes, setVotes] = useState(comment.votes)
+    const timeAgo = convertToTimeAgo(comment.created_at)
 
 
     async function sendVotes() {
@@ -117,7 +119,7 @@ export const CommentCard = ({ comment, setPostIndicator }: CommentCardProps): JS
             <div className='flex gap-2'>
                 <img className='w-10 h-10 object-cover rounded-full' src={authorImgUrl} alt="" />
                 <p>{comment.author}</p>
-                <p>{comment.created_at}</p>
+                <p>{timeAgo}</p>
             </div>
             <p className='mx-12 my-2 p-2'>{comment.body}</p>
             <div id='buttons' className='flex flex-wrap self-end'>
