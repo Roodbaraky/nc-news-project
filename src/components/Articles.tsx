@@ -7,8 +7,8 @@ import { IArticle, ArticlesProps } from '../types/Articles'
 
 
 export const Articles = ({ articles, searchParams, setSearchParams }: ArticlesProps): JSX.Element => {
-    let orderBy = searchParams.get('order_by')
-    let sortBy = searchParams.get('sort_by')
+    let orderBy = searchParams.get('order_by') 
+    let sortBy = searchParams.get('sort_by') 
     const handleFilterChange = (e: MouseEvent | ChangeEvent) => {
 
         const target = e.target as HTMLButtonElement
@@ -16,16 +16,16 @@ export const Articles = ({ articles, searchParams, setSearchParams }: ArticlesPr
             orderBy = target.id
         }
         else {
-            orderBy = searchParams.get('order_by')
+            orderBy = searchParams.get('order_by')|| 'DESC'
         }
 
-        sortBy = (document.getElementById('sort-by') as HTMLSelectElement).value
+        sortBy = (document.getElementById('sort-by') as HTMLSelectElement).value|| 'created_at'
         if (orderBy && sortBy) {
             refreshSearch(orderBy, sortBy)
         }
     }
 
-    async function refreshSearch(order_by: string | undefined, sort_by: string | undefined = 'created_at') {
+    async function refreshSearch(order_by: string ='DESC', sort_by: string  = 'created_at') {
         setSearchParams((searchParams) => {
             return { ...searchParams, sort_by, order_by }
 
