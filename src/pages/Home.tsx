@@ -1,16 +1,13 @@
-import { useContext, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useContext } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
 import { Articles } from "../components/Articles";
 import { Loading } from "../components/Loading";
-import { getArticles } from "../services/api";
-import { useParams, useSearchParams } from "react-router-dom";
-import { IArticle } from "../types/Articles";
-import { SearchParams } from "../types/Articles";
 import { ErrorContext } from "../context/context";
-import { useQuery } from "@tanstack/react-query";
+import { getArticles } from "../services/api";
+import { IArticle, SearchParams } from "../types/Articles";
 
 export const Home = () => {
-  const [articles, setArticles] = useState<IArticle[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const { setError } = useContext(ErrorContext) ?? {
     error: null,
     setError: () => {},
@@ -18,37 +15,6 @@ export const Home = () => {
 
   const { topic } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-
-  // useEffect(() => {
-  //   const searchParamObject: SearchParams = {};
-  //   for (const [key, value] of searchParams.entries()) {
-  //     searchParamObject[key as keyof SearchParams] = value;
-  //   }
-  //   const { sort_by, order_by, limit, page, author } = searchParamObject;
-  //   console.log("check for infinite loop");
-  //   async function fetchArticles() {
-  //     try {
-  //       setIsLoading(true);
-  //       const fetchedArticles: IArticle[] = await getArticles(
-  //         topic,
-  //         sort_by,
-  //         order_by,
-  //         limit,
-  //         page,
-  //         author
-  //       );
-  //       setArticles(fetchedArticles);
-
-  //       if (articles.length) {
-  //         setIsLoading(false);
-  //       }
-  //     } catch (err) {
-  //       setError(err as Error);
-  //     }
-  //   }
-
-  //   fetchArticles();
-  // }, [articles.length, searchParams, setError, topic]);
   const searchParamObject: SearchParams = {};
     for (const [key, value] of searchParams.entries()) {
       searchParamObject[key as keyof SearchParams] = value;
@@ -61,7 +27,9 @@ export const Home = () => {
     })
   
     
-
+if(articlesQuery.isError){
+  setError(new Error('error fetching articles'))
+}
   return (
     <section id="home-container w-full w-screen flex flex-col">
       {articlesQuery.isLoading && (
@@ -74,7 +42,6 @@ export const Home = () => {
       ) : (
         <Articles
           articles={articlesQuery.data!}
-          setArticles={setArticles}
           setSearchParams={setSearchParams}
           searchParams={searchParams}
         />

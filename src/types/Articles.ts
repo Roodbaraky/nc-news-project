@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
 import { SetURLSearchParams } from "react-router-dom";
 
 
@@ -17,7 +16,6 @@ export interface IArticle {
 
 export interface ArticlesProps {
     articles: IArticle[];
-    setArticles: Dispatch<SetStateAction<IArticle[]>>;
     setSearchParams: SetURLSearchParams
     searchParams: URLSearchParams,
 }
