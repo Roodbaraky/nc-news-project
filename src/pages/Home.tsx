@@ -16,20 +16,19 @@ export const Home = () => {
   const { topic } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const searchParamObject: SearchParams = {};
-    for (const [key, value] of searchParams.entries()) {
-      searchParamObject[key as keyof SearchParams] = value;
-    }
+  for (const [key, value] of searchParams.entries()) {
+    searchParamObject[key as keyof SearchParams] = value;
+  }
   const { sort_by, order_by, limit, page, author } = searchParamObject;
 
   const articlesQuery = useQuery<IArticle[], Error>({
     queryKey: ["articles", topic, sort_by, order_by, limit, page, author],
-    queryFn: () =>getArticles(topic, sort_by, order_by, limit, page, author),
-    })
-  
-    
-if(articlesQuery.isError){
-  setError(new Error('error fetching articles'))
-}
+    queryFn: () => getArticles(topic, sort_by, order_by, limit, page, author),
+  });
+
+  if (articlesQuery.isError) {
+    setError(new Error("error fetching articles"));
+  }
   return (
     <section id="home-container w-full w-screen flex flex-col">
       {articlesQuery.isLoading && (

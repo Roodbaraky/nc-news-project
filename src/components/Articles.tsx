@@ -34,7 +34,7 @@ export const Articles = ({
       return { ...searchParams, sort_by, order_by };
     });
   }
-  useEffect(() => {}, [setSearchParams]);
+
   return (
     <section
       id="articles-container"
