@@ -1,7 +1,7 @@
+import { ChangeEvent, MouseEvent } from "react";
 import { BiDownArrow, BiUpArrow } from "react-icons/bi";
+import { ArticlesProps, IArticle } from "../types/Articles";
 import { ArticleTile } from "./ArticleTile";
-import { ChangeEvent, MouseEvent, useEffect } from "react";
-import { IArticle, ArticlesProps } from "../types/Articles";
 
 export const Articles = ({
   articles,
