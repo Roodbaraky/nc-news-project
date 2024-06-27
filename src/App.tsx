@@ -8,6 +8,7 @@ import { ErrorPopUp } from "./components/ErrorPopUp";
 import { ErrorPage } from "./pages/ErrorPage";
 import { User } from "./types/User";
 import { CustomError } from "./types/Error";
+import { PageContainer } from "./components/PageContainer";
 
 
 function App() {
@@ -23,7 +24,7 @@ function App() {
     <>
       <UserContext.Provider value={{ user, setUser }}>
         <ErrorContext.Provider value={{ error, setError }}>
-       
+       <PageContainer>
             <section
               id="app-container"
               className="flex flex-col h-full w-full align-items-center bg-bkg text-content"
@@ -41,7 +42,7 @@ function App() {
                 <ErrorPopUp error={error} setError={setError} />
               )}
             </section>
-        
+            </PageContainer>
         </ErrorContext.Provider>
       </UserContext.Provider>
     </>

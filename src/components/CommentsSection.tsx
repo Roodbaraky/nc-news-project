@@ -3,9 +3,8 @@ import { CommentCard } from "./CommentCard";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCommentsById, postArticleComment } from "../services/api";
 import { useParams } from "react-router-dom";
-import { Comment } from "../types/Comments"; // Assuming you have a Comment type defined in types/Comments
-
-export const CommentsSection = (): JSX.Element => {
+import { Comment } from "../types/Comments";
+export const CommentsSection = () => {
   const { article_id } = useParams<{ article_id: string }>();
   const queryClient = useQueryClient();
 
